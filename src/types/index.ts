@@ -1,4 +1,6 @@
-export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+import type { HTTP_METHODS } from "@/config/http";
+
+export type HttpMethod = (typeof HTTP_METHODS)[number];
 
 export type BodyType = "none" | "json" | "form-data";
 
