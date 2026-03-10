@@ -1,9 +1,13 @@
+import { HTTP_METHODS } from "@/config/http";
 import { useExecuteRequest } from "@/hooks/useExecuteRequest";
+import { useRequestStore } from "@/stores/requestStore";
 import type { RequestConfig } from "@/types";
-import { useState } from "react";
 
-const makeConfig = (url: string): RequestConfig => ({
-  method: "GET",
+const buildConfig = (
+  method: RequestConfig["method"],
+  url: string,
+): RequestConfig => ({
+  method,
   url,
   params: [],
   headers: [],
@@ -11,22 +15,34 @@ const makeConfig = (url: string): RequestConfig => ({
 });
 
 const App = () => {
-  const [url, setUrl] = useState(
-    "https://jsonplaceholder.typicode.com/posts/1",
-  );
+  const method = useRequestStore((s) => s.method);
+  const url = useRequestStore((s) => s.url);
+  const setUrl = useRequestStore((s) => s.setUrl);
+  const setMethod = useRequestStore((s) => s.setMethod);
+
   const { execute, data, loading, error } = useExecuteRequest();
 
   return (
     <div className="p-24">
       <h1>ReqLab - Basic</h1>
       <div className="flex gap-8 mt-8">
+        <select
+          value={method}
+          onChange={(e) => setMethod(e.target.value as RequestConfig["method"])}
+        >
+          {HTTP_METHODS.map((v) => (
+            <option id={v} value={v}>
+              {v}
+            </option>
+          ))}
+        </select>
         <input
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="border-1 px-2 py-1"
+          className="border px-2 py-1"
         />
         <button
-          onClick={() => execute(makeConfig(url))}
+          onClick={() => execute(buildConfig(method, url))}
           disabled={loading}
           className="bg-green-400 p-2 rounded-lg"
         >
