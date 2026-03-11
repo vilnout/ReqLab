@@ -5,22 +5,12 @@ import { useExecuteRequest } from "@/hooks/useExecuteRequest";
 import { useRequestStore } from "@/stores/requestStore";
 import type { RequestConfig } from "@/types";
 
-const buildConfig = (
-  method: RequestConfig["method"],
-  url: string,
-): RequestConfig => ({
-  method,
-  url,
-  params: [],
-  headers: [],
-  body: { type: "none", content: "" },
-});
-
 const App = () => {
   const method = useRequestStore((s) => s.method);
   const url = useRequestStore((s) => s.url);
   const setUrl = useRequestStore((s) => s.setUrl);
   const setMethod = useRequestStore((s) => s.setMethod);
+  const getRequestConfig = useRequestStore((s) => s.getRequestConfig);
 
   const { execute, data, loading, error } = useExecuteRequest();
 
@@ -49,7 +39,7 @@ const App = () => {
               className="border px-2 py-1"
             />
             <button
-              onClick={() => execute(buildConfig(method, url))}
+              onClick={() => execute(getRequestConfig())}
               disabled={loading}
               className="bg-green-400 p-2 rounded-lg"
             >
