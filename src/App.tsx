@@ -11,6 +11,8 @@ const App = () => {
   const setUrl = useRequestStore((s) => s.setUrl);
   const setMethod = useRequestStore((s) => s.setMethod);
   const getRequestConfig = useRequestStore((s) => s.getRequestConfig);
+  const setLastResponse = useRequestStore((s) => s.setLastResponse);
+  const addHistoryEntry = useRequestStore((s) => s.addHistoryEntry);
 
   const { execute, data, loading, error } = useExecuteRequest();
 
@@ -39,7 +41,12 @@ const App = () => {
               className="border px-2 py-1"
             />
             <button
-              onClick={() => execute(getRequestConfig())}
+              onClick={() =>
+                execute(getRequestConfig(), (response) => {
+                  setLastResponse(response);
+                  addHistoryEntry({ config: getRequestConfig(), response });
+                })
+              }
               disabled={loading}
               className="bg-green-400 p-2 rounded-lg"
             >
