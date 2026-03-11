@@ -36,5 +36,5 @@
 }
 
 @utility topbar-buttons {
-  @apply w-7 h-7 rounded border border-border-default text-text-ghost hover:text-text-muted text-xs transition-colors flex items-center justify-center;
+  @apply w-7 h-7 rounded  hover:bg-surface-raised text-text-ghost hover:text-text-muted text-xs transition-colors flex items-center justify-center;
 }
