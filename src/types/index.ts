@@ -4,6 +4,8 @@ export type HttpMethod = (typeof HTTP_METHODS)[number];
 
 export type BodyType = "none" | "json" | "form-data";
 
+export type RequestTab = "params" | "headers" | "body" | "auth";
+
 export interface RequestParam {
   id: string;
   key: string;
@@ -31,4 +33,25 @@ export interface RequestConfig {
   params: RequestParam[];
   headers: RequestParam[];
   body: RequestBody;
+}
+
+export interface SavedRequest {
+  id: string;
+  name: string;
+  config: RequestConfig;
+  createdAt: number;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  requests: SavedRequest[];
+  createdAt: number;
+}
+
+export interface HistoryEntry {
+  id: string;
+  config: RequestConfig;
+  response: ResponseData | null;
+  sentAt: number;
 }
