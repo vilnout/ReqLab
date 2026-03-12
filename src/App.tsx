@@ -1,13 +1,13 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { TopBar } from "@/components/layout/TopBar";
-import { UrlBar } from "@/components/request/UrlBar";
+import { RequestPanel } from "@/components/request/RequestPanel";
 
 const App = () => {
   return (
-    <div className="h-screen flex flex-col bg-surface-base overflow-hidden">
+    <div className="bg-surface-base flex h-screen flex-col overflow-hidden">
       <TopBar />
       <AppLayout>
-        <UrlBar />
+        <RequestPanel />
       </AppLayout>
     </div>
   );
