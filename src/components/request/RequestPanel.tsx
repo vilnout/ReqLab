@@ -1,3 +1,4 @@
+import { KeyValueEditor } from "@/components/request/KeyValueEditor";
 import { RequestTabs } from "@/components/request/RequestTabs";
 import { UrlBar } from "@/components/request/UrlBar";
 import { useRequestStore } from "@/stores/requestStore";
@@ -8,9 +9,9 @@ export const RequestPanel = () => {
     <div>
       <UrlBar />
       <RequestTabs />
-      <div className="text-white">
-        {activeTab === "params" && <div>params</div>}
-        {activeTab === "headers" && <div>headers</div>}
+      <div className="min-h-50 text-white">
+        {activeTab === "params" && <KeyValueEditor type="params" />}
+        {activeTab === "headers" && <KeyValueEditor type="headers" />}
         {activeTab === "body" && <div>body</div>}
         {activeTab === "auth" && <div>auth</div>}
       </div>
