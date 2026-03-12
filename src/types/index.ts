@@ -2,7 +2,7 @@ import type { HTTP_METHODS } from "@/config/http";
 
 export type HttpMethod = (typeof HTTP_METHODS)[number];
 
-export type BodyType = "none" | "json" | "form-data";
+export type BodyType = "none" | "json" | "form-data" | "x-www-form-urlencoded";
 
 export type RequestTab = "params" | "headers" | "body" | "auth";
 
