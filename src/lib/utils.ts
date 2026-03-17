@@ -43,3 +43,12 @@ export const tryParseJson = (raw: string): unknown | null => {
     return null;
   }
 };
+
+export const statusTextMap: Record<number, string> = {
+  200: "OK",
+  201: "Created",
+  400: "Bad Request",
+  401: "Unauthorized",
+  404: "Not Found",
+  500: "Internal Server Error",
+};

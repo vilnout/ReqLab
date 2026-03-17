@@ -1,3 +1,4 @@
+import { statusTextMap } from "@/lib/utils";
 import type { RequestConfig, ResponseData } from "@/types";
 import { useCallback, useState } from "react";
 
@@ -66,7 +67,8 @@ export const useExecuteRequest = () => {
         });
         const responseData: ResponseData = {
           status: response.status,
-          statusText: response.statusText,
+          statusText:
+            response.statusText || statusTextMap[response.status] || "Unknown",
           headers: responseHeaders,
           body,
           timingMs,
