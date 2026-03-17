@@ -10,16 +10,25 @@ export const UrlBar = () => {
   const getRequestConfig = useRequestStore((s) => s.getRequestConfig);
   const setLastResponse = useRequestStore((s) => s.setLastResponse);
   const addHistoryEntry = useRequestStore((s) => s.addHistoryEntry);
+  const setIsLoading = useRequestStore((s) => s.setIsLoading);
 
   const { execute, loading } = useExecuteRequest();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = () => {
     const config = getRequestConfig();
-    execute(config, (response) => {
-      setLastResponse(response);
-      addHistoryEntry({ config, response });
-    });
+    setIsLoading(true);
+    execute(
+      config,
+      (response) => {
+        setLastResponse(response);
+        addHistoryEntry({ config, response });
+        setIsLoading(false);
+      },
+      (error) => {
+        setIsLoading(false);
+      },
+    );
   };
 
   useEffect(() => {

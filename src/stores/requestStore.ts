@@ -27,6 +27,7 @@ interface RequestStore {
   headers: RequestParam[];
   bodyType: BodyType;
   bodyContent: string;
+  isLoading: boolean;
 
   activeTab: RequestTab;
   lastResponse: ResponseData | null;
@@ -35,6 +36,8 @@ interface RequestStore {
 
   setMethod: (method: HttpMethod) => void;
   setUrl: (url: string) => void;
+
+  setIsLoading: (loading: boolean) => void;
 
   addParam: () => void;
   updateParam: (
@@ -84,6 +87,9 @@ export const useRequestStore = create<RequestStore>()((set, get) => ({
   lastResponse: null,
   collections: [],
   history: [],
+  isLoading: false,
+
+  setIsLoading: (isLoading) => set({ isLoading }),
 
   setMethod: (method) => set({ method }),
   setUrl: (url) => set({ url }),

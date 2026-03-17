@@ -1,6 +1,7 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { TopBar } from "@/components/layout/TopBar";
 import { RequestPanel } from "@/components/request/RequestPanel";
+import { ResponsePanel } from "@/components/response/ResponsePanel";
 
 const App = () => {
   return (
@@ -8,6 +9,7 @@ const App = () => {
       <TopBar />
       <AppLayout>
         <RequestPanel />
+        <ResponsePanel />
       </AppLayout>
     </div>
   );
