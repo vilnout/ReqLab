@@ -11,6 +11,7 @@ export const UrlBar = () => {
   const setLastResponse = useRequestStore((s) => s.setLastResponse);
   const addHistoryEntry = useRequestStore((s) => s.addHistoryEntry);
   const setIsLoading = useRequestStore((s) => s.setIsLoading);
+  const setLastError = useRequestStore((s) => s.setLastError);
 
   const { execute, loading } = useExecuteRequest();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -18,6 +19,8 @@ export const UrlBar = () => {
   const handleSend = () => {
     const config = getRequestConfig();
     setIsLoading(true);
+    setLastError(null);
+    setLastResponse(null);
     execute(
       config,
       (response) => {
@@ -26,6 +29,7 @@ export const UrlBar = () => {
         setIsLoading(false);
       },
       (error) => {
+        setLastError(error);
         setIsLoading(false);
       },
     );

@@ -28,6 +28,7 @@ interface RequestStore {
   bodyType: BodyType;
   bodyContent: string;
   isLoading: boolean;
+  lastError: string | null;
 
   activeTab: RequestTab;
   lastResponse: ResponseData | null;
@@ -38,6 +39,8 @@ interface RequestStore {
   setUrl: (url: string) => void;
 
   setIsLoading: (loading: boolean) => void;
+
+  setLastError: (error: string | null) => void;
 
   addParam: () => void;
   updateParam: (
@@ -88,8 +91,11 @@ export const useRequestStore = create<RequestStore>()((set, get) => ({
   collections: [],
   history: [],
   isLoading: false,
+  lastError: null,
 
   setIsLoading: (isLoading) => set({ isLoading }),
+
+  setLastError: (lastError) => set({ lastError }),
 
   setMethod: (method) => set({ method }),
   setUrl: (url) => set({ url }),

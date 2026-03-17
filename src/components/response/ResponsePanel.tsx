@@ -5,7 +5,7 @@ import {
   tryParseJson,
 } from "@/lib/utils";
 import { useRequestStore } from "@/stores/requestStore";
-import { Check, Copy, SendIcon } from "lucide-react";
+import { AlertCircle, Check, Copy, SendIcon } from "lucide-react";
 import { useState } from "react";
 
 const RESPONSE_TABS = ["pretty", "raw", "headers"] as const;
@@ -15,6 +15,7 @@ type ResponseTab = (typeof RESPONSE_TABS)[number];
 export const ResponsePanel = () => {
   const lastResponse = useRequestStore((s) => s.lastResponse);
   const isLoading = useRequestStore((s) => s.isLoading);
+  const lastError = useRequestStore((s) => s.lastError);
 
   const [activeTab, setActiveTab] = useState<ResponseTab>("pretty");
   const [copied, setCopied] = useState(false);
@@ -28,22 +29,6 @@ export const ResponsePanel = () => {
     }, 2000);
   };
 
-  // Empty - Not loading and no previous response
-  if (!isLoading && !lastResponse) {
-    return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3">
-        <div className="bg-surface-raised border-border-default text-text-ghost flex h-10 w-10 items-center justify-center rounded-full border">
-          <SendIcon />
-        </div>
-        <p className="text-text-muted font-sans text-[13px]">
-          Send a request to see the response
-        </p>
-        <p className="text-text-ghost font-mono text-[11px]">
-          Cmd+Enter to send
-        </p>
-      </div>
-    );
-  }
   // Temporary loading state
   if (isLoading) {
     return (
@@ -72,6 +57,42 @@ export const ResponsePanel = () => {
       </div>
     );
   }
+  if (lastError) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-3">
+        <div className="bg-status-error-bg flex h-10 w-10 items-center justify-center rounded-full">
+          <AlertCircle
+            size={18}
+            strokeWidth={1.5}
+            className="text-status-error"
+          />
+        </div>
+        <p className="text-status-error font-sans text-[15px] font-medium">
+          Network Error
+        </p>
+        <p className="text-text-ghost max-w-sm text-center font-mono text-[12px] leading-relaxed">
+          {lastError}
+        </p>
+      </div>
+    );
+  }
+  // Empty - Not loading and no previous response
+  if (!isLoading && !lastResponse) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center gap-3">
+        <div className="bg-surface-raised border-border-default text-text-ghost flex h-10 w-10 items-center justify-center rounded-full border">
+          <SendIcon />
+        </div>
+        <p className="text-text-muted font-sans text-[13px]">
+          Send a request to see the response
+        </p>
+        <p className="text-text-ghost font-mono text-[11px]">
+          Cmd+Enter to send
+        </p>
+      </div>
+    );
+  }
+
   // Last reponse always available at this point
   const { status, statusText, headers, body, timingMs, size } = lastResponse!;
   const statusMeta = getStatusMeta(status);
