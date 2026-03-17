@@ -1,9 +1,5 @@
-import {
-  formatBytes,
-  formatTiming,
-  getStatusMeta,
-  tryParseJson,
-} from "@/lib/utils";
+import { JsonViewer } from "@/components/response/JsonViewer";
+import { formatBytes, formatTiming, getStatusMeta } from "@/lib/utils";
 import { useRequestStore } from "@/stores/requestStore";
 import { AlertCircle, Check, Copy, SendIcon } from "lucide-react";
 import { useState } from "react";
@@ -45,7 +41,7 @@ export const ResponsePanel = () => {
             />
           ))}
         </div>
-        <p className="text-text-ghost font-mono text-[13px]">
+        <p className="text-text-ghost font-mono text-sm">
           Waiting for response...
         </p>
         <style>{`
@@ -67,10 +63,10 @@ export const ResponsePanel = () => {
             className="text-status-error"
           />
         </div>
-        <p className="text-status-error font-sans text-[15px] font-medium">
+        <p className="text-status-error font-sans text-base font-medium">
           Network Error
         </p>
-        <p className="text-text-ghost max-w-sm text-center font-mono text-[12px] leading-relaxed">
+        <p className="text-text-ghost max-w-sm text-center font-mono text-xs leading-relaxed">
           {lastError}
         </p>
       </div>
@@ -83,12 +79,10 @@ export const ResponsePanel = () => {
         <div className="bg-surface-raised border-border-default text-text-ghost flex h-10 w-10 items-center justify-center rounded-full border">
           <SendIcon />
         </div>
-        <p className="text-text-muted font-sans text-[13px]">
+        <p className="text-text-muted font-sans text-sm">
           Send a request to see the response
         </p>
-        <p className="text-text-ghost font-mono text-[11px]">
-          Cmd+Enter to send
-        </p>
+        <p className="text-text-ghost font-mono text-xs">Cmd+Enter to send</p>
       </div>
     );
   }
@@ -96,18 +90,17 @@ export const ResponsePanel = () => {
   // Last reponse always available at this point
   const { status, statusText, headers, body, timingMs, size } = lastResponse!;
   const statusMeta = getStatusMeta(status);
-  const isJson = tryParseJson(body) !== null;
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/*Header*/}
       <div className="border-border-default flex shrink-0 items-center gap-2.5 border-b px-4 py-2.5">
-        <span className="text-text-ghost mr-1 font-mono text-[10px] font-semibold tracking-widest uppercase">
+        <span className="text-text-ghost mr-1 font-mono text-xs font-semibold tracking-widest uppercase">
           Response
         </span>
         {/*status indicator*/}
         <div
-          className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-mono text-[11px] font-semibold ${statusMeta.bgPrimary} ${statusMeta.text} `}
+          className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${statusMeta.bgPrimary} ${statusMeta.text} `}
         >
           <div
             className={`h-1.5 w-1.5 rounded-full ${statusMeta.bgSecondary}`}
@@ -120,7 +113,7 @@ export const ResponsePanel = () => {
         <div className="ml-auto flex items-center gap-1.5">
           <button
             onClick={handleCopy}
-            className="border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle flex cursor-pointer items-center gap-1.5 rounded border px-2.5 py-1 font-mono text-[10px] transition-colors"
+            className="border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle flex cursor-pointer items-center gap-1.5 rounded border px-2.5 py-1 font-mono text-xs transition-colors"
           >
             {copied ? (
               <>
@@ -143,7 +136,7 @@ export const ResponsePanel = () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`cursor-pointer rounded px-2.5 py-1 font-mono text-[10px] capitalize transition-colors ${activeTab === tab ? "bg-accent-dim text-accent" : "text-text-ghost hover:text-text-muted"} `}
+              className={`cursor-pointer rounded px-2.5 py-1 font-mono text-xs capitalize transition-colors ${activeTab === tab ? "bg-accent-dim text-accent" : "text-text-ghost hover:text-text-muted"} `}
             >
               {tab}
             </button>
@@ -152,9 +145,9 @@ export const ResponsePanel = () => {
       </div>
       {/*response body*/}
       <div className="flex-1 overflow-auto">
-        {activeTab === "pretty" && <div>Json Plugin</div>}
+        {activeTab === "pretty" && <JsonViewer raw={body} />}
         {activeTab === "raw" && (
-          <pre className="text-text-secondary p-4 font-mono text-[12.5px] leading-relaxed wrap-break-word whitespace-pre-wrap">
+          <pre className="text-text-secondary p-4 font-mono text-xs leading-relaxed wrap-break-word whitespace-pre-wrap">
             {body}
           </pre>
         )}
@@ -166,10 +159,10 @@ export const ResponsePanel = () => {
                   key={key}
                   className={`border-border-default grid grid-cols-[200px_1fr] border-b last:border-b-0 ${i % 2 === 0 ? "bg-transparent" : "bg-surface-overlay"} `}
                 >
-                  <div className="text-text-muted border-border-default border-r px-3 py-2 font-mono text-[11px]">
+                  <div className="text-text-muted border-border-default border-r px-3 py-2 font-mono text-xs">
                     {key}
                   </div>
-                  <div className="text-text-muted border-border-default border-r px-3 py-2 font-mono text-[11px]">
+                  <div className="text-text-muted border-border-default border-r px-3 py-2 font-mono text-xs">
                     {value}
                   </div>
                 </div>
