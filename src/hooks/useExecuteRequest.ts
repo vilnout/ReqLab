@@ -1,3 +1,4 @@
+import { statusTextMap } from "@/lib/utils";
 import type { RequestConfig, ResponseData } from "@/types";
 import { useCallback, useState } from "react";
 
@@ -17,7 +18,11 @@ export const useExecuteRequest = () => {
   const [state, setState] = useState<ExecuteState>(INITIAL_STATE);
 
   const execute = useCallback(
-    async (config: RequestConfig, onSuccess?: (data: ResponseData) => void) => {
+    async (
+      config: RequestConfig,
+      onSuccess?: (data: ResponseData) => void,
+      onError?: (error: string) => void,
+    ) => {
       setState({ data: null, loading: true, error: null });
       const startTime = performance.now();
 
@@ -62,7 +67,8 @@ export const useExecuteRequest = () => {
         });
         const responseData: ResponseData = {
           status: response.status,
-          statusText: response.statusText,
+          statusText:
+            response.statusText || statusTextMap[response.status] || "Unknown",
           headers: responseHeaders,
           body,
           timingMs,
@@ -75,11 +81,13 @@ export const useExecuteRequest = () => {
           error: null,
         });
       } catch (err) {
+        const message = err instanceof Error ? err.message : "Request Failed";
         setState({
           data: null,
           loading: false,
           error: err instanceof Error ? err.message : "Request Failed",
         });
+        onError?.(message);
       }
     },
     [],
