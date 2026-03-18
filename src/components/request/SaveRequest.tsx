@@ -1,6 +1,7 @@
+import { useClickOutside } from "@/hooks/useClickOutside";
 import { useRequestStore } from "@/stores/requestStore";
 import { Bookmark, Check, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export const SaveRequest = () => {
   const collections = useRequestStore((s) => s.collections);
@@ -10,6 +11,7 @@ export const SaveRequest = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [requestName, setRequestName] = useState("");
   const [saved, setSaved] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleOpen = () => {
     if (collections.length === 0) return;
@@ -28,10 +30,12 @@ export const SaveRequest = () => {
     }, 2000);
   };
 
+  useClickOutside(ref, () => setOpen(false));
+
   if (collections.length === 0) return;
 
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <button
         onClick={open ? () => setOpen(false) : handleOpen}
         className={`border-border-default flex h-7 items-center gap-1.5 rounded border px-2.5 font-mono text-xs transition-colors ${
