@@ -1,13 +1,8 @@
 import { MethodBadge } from "@/components/request/MethodSelector";
+import { DeleteButton } from "@/components/ui/DeleteButton";
 import type { RequestStore } from "@/stores/requestStore";
 import type { Collection } from "@/types";
-import {
-  ChevronDown,
-  ChevronRight,
-  Folder,
-  FolderOpen,
-  Trash2,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, Folder, FolderOpen } from "lucide-react";
 
 interface CollectionItemProps {
   collection: Collection;
@@ -67,15 +62,7 @@ export const CollectionItem = ({
             {collection.requests.length}
           </span>
         </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDeleteCollection();
-          }}
-          className="text-text-ghost hover:text-status-error shrink-0 cursor-pointer opacity-0 transition-all group-hover:opacity-100"
-        >
-          <Trash2 size={11} strokeWidth={2} />
-        </button>
+        <DeleteButton onDelete={onDeleteCollection} />
       </div>
 
       {/*Display saved requests*/}
@@ -96,15 +83,9 @@ export const CollectionItem = ({
               <span className="text-text-ghost group-hover:text-text-muted min-w-0 flex-1 truncate text-left font-mono text-xs transition-colors">
                 {saved.name}
               </span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteRequest(collection.id, saved.id);
-                }}
-                className="text-text-ghost hover:text-status-error shrink-0 cursor-pointer opacity-0 transition-all group-hover:opacity-100"
-              >
-                <Trash2 size={11} strokeWidth={2} />
-              </button>
+              <DeleteButton
+                onDelete={() => onDeleteRequest(collection.id, saved.id)}
+              />
             </button>
           ))}
         </div>
