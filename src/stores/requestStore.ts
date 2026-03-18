@@ -20,7 +20,7 @@ function makeParam(partial: Partial<RequestParam> = {}): RequestParam {
   };
 }
 
-interface RequestStore {
+export interface RequestStore {
   method: HttpMethod;
   url: string;
   params: RequestParam[];
