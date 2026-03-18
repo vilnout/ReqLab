@@ -169,7 +169,7 @@ export const useRequestStore = create<RequestStore>()((set, get) => ({
     set({
       method: config.method,
       url: config.url,
-      params: config.params.length > 0 ? config.headers : [makeParam()],
+      params: config.params.length > 0 ? config.params : [makeParam()],
       headers: config.headers.length > 0 ? config.headers : [makeParam()],
       bodyType: config.body.type,
       bodyContent: config.body.content,
