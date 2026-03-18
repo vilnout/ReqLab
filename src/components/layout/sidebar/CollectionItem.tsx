@@ -1,6 +1,13 @@
+import { MethodBadge } from "@/components/request/MethodSelector";
 import type { RequestStore } from "@/stores/requestStore";
 import type { Collection } from "@/types";
-import { ChevronDown, ChevronRight, Folder, FolderOpen } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Folder,
+  FolderOpen,
+  Trash2,
+} from "lucide-react";
 
 interface CollectionItemProps {
   collection: Collection;
@@ -58,7 +65,39 @@ export const CollectionItem = ({
             {collection.requests.length}
           </span>
         </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          className="text-text-ghost hover:text-status-error shrink-0 cursor-pointer opacity-0 transition-all group-hover:opacity-100"
+        >
+          <Trash2 size={11} strokeWidth={2} />
+        </button>
       </div>
+
+      {/*Display saved requests*/}
+      {isExpanded && (
+        <div className="border-border-default ml-3 border-l">
+          {collection.requests.length === 0 && (
+            <p className="py-1 pl-3 font-mono text-xs text-white">
+              No saved requests
+            </p>
+          )}
+          {collection.requests.map((saved) => (
+            <button
+              key={saved.id}
+              onClick={() => onLoadRequest(saved.config)}
+              className="hover:bg-surface-raised group flex w-full cursor-pointer items-center gap-2 py-1.5 pr-2 pl-3 transition-colors"
+            >
+              <MethodBadge method={saved.config.method} size="sm" />
+              <span className="text-text-ghost group-hover:text-text-muted min-w-0 flex-1 truncate text-left font-mono text-xs transition-colors">
+                {saved.name}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
