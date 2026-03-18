@@ -1,4 +1,5 @@
 import { HTTP_METHODS } from "@/config/http";
+import { useClickOutside } from "@/hooks/useClickOutside";
 import { useRequestStore } from "@/stores/requestStore";
 import type { HttpMethod } from "@/types";
 import { ChevronDown } from "lucide-react";
@@ -34,15 +35,7 @@ export const MethodSelector = () => {
   const setMethod = useRequestStore((s) => s.setMethod);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(ref, () => setOpen(false));
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

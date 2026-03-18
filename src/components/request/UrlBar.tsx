@@ -1,4 +1,5 @@
 import { MethodSelector } from "@/components/request/MethodSelector";
+import { SaveRequest } from "@/components/request/SaveRequest";
 import { useExecuteRequest } from "@/hooks/useExecuteRequest";
 import { useRequestStore } from "@/stores/requestStore";
 import { Loader2, Send } from "lucide-react";
@@ -68,6 +69,7 @@ export const UrlBar = () => {
         )}
         {loading ? "Sending" : "Send"}
       </button>
+      <SaveRequest />
     </div>
   );
 };
