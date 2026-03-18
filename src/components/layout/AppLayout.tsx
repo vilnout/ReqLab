@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/layout/Sidebar";
+import { Sidebar } from "@/components/layout/sidebar";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -6,9 +6,9 @@ interface AppLayoutProps {
 
 export const AppLayout = ({ children }: AppLayoutProps) => {
   return (
-    <div className="flex overflow-hidden flex-1">
+    <div className="flex flex-1 overflow-hidden">
       <Sidebar />
-      <main className="flex flex-col flex-1 overflow-hidden bg-surface-base">
+      <main className="bg-surface-base flex flex-1 flex-col overflow-hidden">
         {children}
       </main>
     </div>
