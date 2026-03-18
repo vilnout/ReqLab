@@ -67,7 +67,7 @@ export interface RequestStore {
 
   setLastResponse: (response: ResponseData | null) => void;
 
-  saveToCollections: (collectionId: string, name: string) => void;
+  saveToCollection: (collectionId: string, name: string) => void;
   createCollection: (name: string) => void;
   deleteCollection: (id: string) => void;
   loadRequest: (config: RequestConfig) => void;
@@ -144,7 +144,7 @@ export const useRequestStore = create<RequestStore>()((set, get) => ({
     set((state) => ({
       collections: state.collections.filter((c) => c.id !== id),
     })),
-  saveToCollections: (collectionId, name) => {
+  saveToCollection: (collectionId, name) => {
     const config = get().getRequestConfig();
     set((state) => ({
       collections: state.collections.map((c) =>
