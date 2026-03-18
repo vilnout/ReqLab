@@ -9,6 +9,7 @@ export const Sidebar = () => {
   const deleteCollection = useRequestStore((s) => s.deleteCollection);
 
   const loadRequest = useRequestStore((s) => s.loadRequest);
+  const deleteRequest = useRequestStore((s) => s.deleteFromCollection);
 
   const [newCollectionName, setNewCollectionName] = useState("");
   const [creatingCollection, setCreatingCollection] = useState(false);
@@ -90,8 +91,9 @@ export const Sidebar = () => {
             collection={collection}
             isExpanded={expandedCollections.has(collection.id)}
             onToggle={() => toggleCollection(collection.id)}
-            onDelete={() => deleteCollection(collection.id)}
+            onDeleteCollection={() => deleteCollection(collection.id)}
             onLoadRequest={loadRequest}
+            onDeleteRequest={deleteRequest}
           />
         ))}
       </div>

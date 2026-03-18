@@ -13,16 +13,18 @@ interface CollectionItemProps {
   collection: Collection;
   isExpanded: boolean;
   onToggle: () => void;
-  onDelete: () => void;
+  onDeleteCollection: () => void;
   onLoadRequest: RequestStore["loadRequest"];
+  onDeleteRequest: RequestStore["deleteFromCollection"];
 }
 
 export const CollectionItem = ({
   collection,
   isExpanded,
   onToggle,
-  onDelete,
+  onDeleteCollection,
   onLoadRequest,
+  onDeleteRequest,
 }: CollectionItemProps) => {
   return (
     <div>
@@ -68,7 +70,7 @@ export const CollectionItem = ({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onDelete();
+            onDeleteCollection();
           }}
           className="text-text-ghost hover:text-status-error shrink-0 cursor-pointer opacity-0 transition-all group-hover:opacity-100"
         >
@@ -94,6 +96,15 @@ export const CollectionItem = ({
               <span className="text-text-ghost group-hover:text-text-muted min-w-0 flex-1 truncate text-left font-mono text-xs transition-colors">
                 {saved.name}
               </span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteRequest(collection.id, saved.id);
+                }}
+                className="text-text-ghost hover:text-status-error shrink-0 cursor-pointer opacity-0 transition-all group-hover:opacity-100"
+              >
+                <Trash2 size={11} strokeWidth={2} />
+              </button>
             </button>
           ))}
         </div>
