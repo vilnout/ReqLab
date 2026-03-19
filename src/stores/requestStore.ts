@@ -9,6 +9,7 @@ import type {
   ResponseData,
 } from "@/types";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 function makeParam(partial: Partial<RequestParam> = {}): RequestParam {
   return {
@@ -79,131 +80,148 @@ export interface RequestStore {
   getRequestConfig: () => RequestConfig;
 }
 
-export const useRequestStore = create<RequestStore>()((set, get) => ({
-  // Initial State
-  method: "GET",
-  url: "https://jsonplaceholder.typicode.com/posts/1",
-  params: [makeParam()],
-  headers: [makeParam()],
-  bodyType: "none",
-  bodyContent: "",
-  activeTab: "params",
-  lastResponse: null,
-  collections: [],
-  history: [],
-  isLoading: false,
-  lastError: null,
-
-  setIsLoading: (isLoading) => set({ isLoading }),
-
-  setLastError: (lastError) => set({ lastError }),
-
-  setMethod: (method) => set({ method }),
-  setUrl: (url) => set({ url }),
-
-  addParam: () => set((state) => ({ params: [...state.params, makeParam()] })),
-  updateParam: (id, field, value) =>
-    set((state) => ({
-      params: state.params.map((p) =>
-        p.id === id ? { ...p, [field]: value } : p,
-      ),
-    })),
-  deleteParam: (id) =>
-    set((state) => {
-      const remaining = state.params.filter((p) => p.id !== id);
-      return {
-        params: remaining.length > 0 ? remaining : [makeParam()],
-      };
-    }),
-  clearParams: () => set({ params: [makeParam()] }),
-  addHeader: () =>
-    set((state) => ({ headers: [...state.headers, makeParam()] })),
-  updateHeader: (id, field, string) =>
-    set((state) => ({
-      headers: state.headers.map((h) =>
-        h.id === id ? { ...h, [field]: string } : h,
-      ),
-    })),
-  deleteHeader: (id) =>
-    set((state) => {
-      const remaining = state.headers.filter((h) => h.id !== id);
-      return { headers: remaining.length > 0 ? remaining : [makeParam()] };
-    }),
-  clearHeaders: () => set({ headers: [makeParam()] }),
-  setBodyType: (type) => set({ bodyType: type }),
-  setBodyContent: (content) => set({ bodyContent: content }),
-  setActiveTab: (tab) => set({ activeTab: tab }),
-  setLastResponse: (response) => set({ lastResponse: response }),
-  createCollection: (name) =>
-    set((state) => ({
-      collections: [
-        ...state.collections,
-        { id: crypto.randomUUID(), name, requests: [], createdAt: Date.now() },
-      ],
-    })),
-  deleteCollection: (id) =>
-    set((state) => ({
-      collections: state.collections.filter((c) => c.id !== id),
-    })),
-  saveToCollection: (collectionId, name) => {
-    const config = get().getRequestConfig();
-    set((state) => ({
-      collections: state.collections.map((c) =>
-        c.id === collectionId
-          ? {
-              ...c,
-              requests: [
-                ...c.requests,
-                {
-                  id: crypto.randomUUID(),
-                  name,
-                  config,
-                  createdAt: Date.now(),
-                },
-              ],
-            }
-          : c,
-      ),
-    }));
-  },
-  deleteFromCollection: (collectionId, id) => {
-    set((state) => ({
-      collections: state.collections.map((c) =>
-        c.id === collectionId
-          ? { ...c, requests: c.requests.filter((r) => r.id !== id) }
-          : c,
-      ),
-    }));
-  },
-  loadRequest: (config) =>
-    set({
-      method: config.method,
-      url: config.url,
-      params: config.params.length > 0 ? config.params : [makeParam()],
-      headers: config.headers.length > 0 ? config.headers : [makeParam()],
-      bodyType: config.body.type,
-      bodyContent: config.body.content,
+export const useRequestStore = create<RequestStore>()(
+  persist(
+    (set, get) => ({
+      // Initial State
+      method: "GET",
+      url: "https://jsonplaceholder.typicode.com/posts/1",
+      params: [makeParam()],
+      headers: [makeParam()],
+      bodyType: "none",
+      bodyContent: "",
+      activeTab: "params",
       lastResponse: null,
-    }),
-  addHistoryEntry: (entry) =>
-    set((state) => ({
-      history: [
-        { ...entry, id: crypto.randomUUID(), sentAt: Date.now() },
-        ...state.history,
-      ].slice(0, 50),
-    })),
-  clearHistory: () => set({ history: [] }),
-  getRequestConfig: () => {
-    const { method, url, params, headers, bodyType, bodyContent } = get();
-    return {
-      method,
-      url,
-      params,
-      headers,
-      body: {
-        type: bodyType,
-        content: bodyContent,
+      collections: [],
+      history: [],
+      isLoading: false,
+      lastError: null,
+
+      setIsLoading: (isLoading) => set({ isLoading }),
+
+      setLastError: (lastError) => set({ lastError }),
+
+      setMethod: (method) => set({ method }),
+      setUrl: (url) => set({ url }),
+
+      addParam: () =>
+        set((state) => ({ params: [...state.params, makeParam()] })),
+      updateParam: (id, field, value) =>
+        set((state) => ({
+          params: state.params.map((p) =>
+            p.id === id ? { ...p, [field]: value } : p,
+          ),
+        })),
+      deleteParam: (id) =>
+        set((state) => {
+          const remaining = state.params.filter((p) => p.id !== id);
+          return {
+            params: remaining.length > 0 ? remaining : [makeParam()],
+          };
+        }),
+      clearParams: () => set({ params: [makeParam()] }),
+      addHeader: () =>
+        set((state) => ({ headers: [...state.headers, makeParam()] })),
+      updateHeader: (id, field, string) =>
+        set((state) => ({
+          headers: state.headers.map((h) =>
+            h.id === id ? { ...h, [field]: string } : h,
+          ),
+        })),
+      deleteHeader: (id) =>
+        set((state) => {
+          const remaining = state.headers.filter((h) => h.id !== id);
+          return { headers: remaining.length > 0 ? remaining : [makeParam()] };
+        }),
+      clearHeaders: () => set({ headers: [makeParam()] }),
+      setBodyType: (type) => set({ bodyType: type }),
+      setBodyContent: (content) => set({ bodyContent: content }),
+      setActiveTab: (tab) => set({ activeTab: tab }),
+      setLastResponse: (response) => set({ lastResponse: response }),
+      createCollection: (name) =>
+        set((state) => ({
+          collections: [
+            ...state.collections,
+            {
+              id: crypto.randomUUID(),
+              name,
+              requests: [],
+              createdAt: Date.now(),
+            },
+          ],
+        })),
+      deleteCollection: (id) =>
+        set((state) => ({
+          collections: state.collections.filter((c) => c.id !== id),
+        })),
+      saveToCollection: (collectionId, name) => {
+        const config = get().getRequestConfig();
+        set((state) => ({
+          collections: state.collections.map((c) =>
+            c.id === collectionId
+              ? {
+                  ...c,
+                  requests: [
+                    ...c.requests,
+                    {
+                      id: crypto.randomUUID(),
+                      name,
+                      config,
+                      createdAt: Date.now(),
+                    },
+                  ],
+                }
+              : c,
+          ),
+        }));
       },
-    };
-  },
-}));
+      deleteFromCollection: (collectionId, id) => {
+        set((state) => ({
+          collections: state.collections.map((c) =>
+            c.id === collectionId
+              ? { ...c, requests: c.requests.filter((r) => r.id !== id) }
+              : c,
+          ),
+        }));
+      },
+      loadRequest: (config) =>
+        set({
+          method: config.method,
+          url: config.url,
+          params: config.params.length > 0 ? config.params : [makeParam()],
+          headers: config.headers.length > 0 ? config.headers : [makeParam()],
+          bodyType: config.body.type,
+          bodyContent: config.body.content,
+          lastResponse: null,
+        }),
+      addHistoryEntry: (entry) =>
+        set((state) => ({
+          history: [
+            { ...entry, id: crypto.randomUUID(), sentAt: Date.now() },
+            ...state.history,
+          ].slice(0, 50),
+        })),
+      clearHistory: () => set({ history: [] }),
+      getRequestConfig: () => {
+        const { method, url, params, headers, bodyType, bodyContent } = get();
+        return {
+          method,
+          url,
+          params,
+          headers,
+          body: {
+            type: bodyType,
+            content: bodyContent,
+          },
+        };
+      },
+    }),
+    {
+      name: "reqlab-workspace",
+      partialize: (state) => ({
+        collections: state.collections,
+        history: state.history,
+      }),
+    },
+  ),
+);
