@@ -14,6 +14,24 @@ const INITIAL_STATE: ExecuteState = {
   error: null,
 };
 
+const PROXY_URL = "/api/proxy";
+
+const buildFetchConfig = (
+  url: string,
+  method: string,
+  headers: Record<string, string>,
+  body: string | undefined,
+): { fetchUrl: string; fetchInit: RequestInit } => {
+  return {
+    fetchUrl: PROXY_URL,
+    fetchInit: {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url, method, headers, body }),
+    },
+  };
+};
+
 export const useExecuteRequest = () => {
   const [state, setState] = useState<ExecuteState>(INITIAL_STATE);
 
@@ -51,12 +69,14 @@ export const useExecuteRequest = () => {
           headers["Content-Type"] = "application/json";
         }
 
-        const response = await fetch(url.toString(), {
-          method: config.method,
+        const { fetchUrl, fetchInit } = buildFetchConfig(
+          url.toString(),
+          config.method,
           headers,
-          body:
-            hasBody && config.body.content ? config.body.content : undefined,
-        });
+          hasBody && config.body.content ? config.body.content : undefined,
+        );
+
+        const response = await fetch(fetchUrl, fetchInit);
         const body = await response.text();
         const timingMs = Math.round(performance.now() - startTime);
         const size = new TextEncoder().encode(body).length;
