@@ -1,4 +1,5 @@
 import { CollectionItem } from "@/components/layout/sidebar/CollectionItem";
+import { RecentHistory } from "@/components/layout/sidebar/RecentHistory";
 import { useRequestStore } from "@/stores/requestStore";
 import { Plus } from "lucide-react";
 import { useState } from "react";
@@ -98,13 +99,7 @@ export const Sidebar = () => {
         ))}
       </div>
 
-      <div className="flex-1" />
-      <div className="text-text-ghost border-border-default border-t px-3.5 py-2 font-mono text-xs font-semibold tracking-widest uppercase">
-        Recent
-      </div>
-      <div className="px-3.5 py-2 pb-4 font-mono text-xs text-white">
-        No requests yet.
-      </div>
+      <RecentHistory />
     </aside>
   );
 };
