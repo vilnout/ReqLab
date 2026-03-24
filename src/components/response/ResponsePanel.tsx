@@ -9,9 +9,9 @@ const RESPONSE_TABS = ["pretty", "raw", "headers"] as const;
 type ResponseTab = (typeof RESPONSE_TABS)[number];
 
 export const ResponsePanel = () => {
-  const lastResponse = useRequestStore((s) => s.lastResponse);
-  const isLoading = useRequestStore((s) => s.isLoading);
-  const lastError = useRequestStore((s) => s.lastError);
+  const lastResponse = useRequestStore((s) => s.getActiveTab().lastResponse);
+  const isLoading = useRequestStore((s) => s.getActiveTab().isLoading);
+  const lastError = useRequestStore((s) => s.getActiveTab().lastError);
 
   const [activeTab, setActiveTab] = useState<ResponseTab>("pretty");
   const [copied, setCopied] = useState(false);

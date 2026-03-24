@@ -5,16 +5,16 @@ import { UrlBar } from "@/components/request/UrlBar";
 import { useRequestStore } from "@/stores/requestStore";
 
 export const RequestPanel = () => {
-  const activeTab = useRequestStore((s) => s.activeTab);
+  const activePanel = useRequestStore((s) => s.getActiveTab().activePanel);
   return (
     <div>
       <UrlBar />
       <RequestTabs />
       <div className="min-h-50 text-white">
-        {activeTab === "params" && <KeyValueEditor type="params" />}
-        {activeTab === "headers" && <KeyValueEditor type="headers" />}
-        {activeTab === "body" && <BodyEditor />}
-        {activeTab === "auth" && <div>auth</div>}
+        {activePanel === "params" && <KeyValueEditor type="params" />}
+        {activePanel === "headers" && <KeyValueEditor type="headers" />}
+        {activePanel === "body" && <BodyEditor />}
+        {activePanel === "auth" && <div>auth</div>}
       </div>
     </div>
   );

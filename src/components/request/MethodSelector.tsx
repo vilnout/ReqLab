@@ -31,7 +31,7 @@ export const MethodBadge = ({ method, size = "md" }: MethodBadgeProps) => {
 
 export const MethodSelector = () => {
   const [open, setOpen] = useState(false);
-  const method = useRequestStore((s) => s.method);
+  const method = useRequestStore((s) => s.getActiveTab().config.method);
   const setMethod = useRequestStore((s) => s.setMethod);
   const ref = useRef<HTMLDivElement>(null);
 

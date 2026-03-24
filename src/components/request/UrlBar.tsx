@@ -6,7 +6,7 @@ import { Loader2, Send } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 
 export const UrlBar = () => {
-  const url = useRequestStore((s) => s.url);
+  const url = useRequestStore((s) => s.getActiveTab().config.url);
   const setUrl = useRequestStore((s) => s.setUrl);
   const getRequestConfig = useRequestStore((s) => s.getRequestConfig);
   const setLastResponse = useRequestStore((s) => s.setLastResponse);

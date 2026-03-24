@@ -14,9 +14,9 @@ const TABS: TabConfig[] = [
     id: "params",
     label: "Params",
     badge: (s) => {
-      const count = s.params.filter(
-        (p) => p.enabled && p.key.trim() !== "",
-      ).length;
+      const count = s
+        .getActiveTab()
+        .config.params.filter((p) => p.enabled && p.key.trim() !== "").length;
       return count > 0 ? count : null;
     },
   },
@@ -24,16 +24,19 @@ const TABS: TabConfig[] = [
     id: "headers",
     label: "Headers",
     badge: (s) => {
-      const count = s.headers.filter(
-        (h) => h.enabled && h.key.trim() !== "",
-      ).length;
+      const count = s
+        .getActiveTab()
+        .config.headers.filter((h) => h.enabled && h.key.trim() !== "").length;
       return count > 0 ? count : null;
     },
   },
   {
     id: "body",
     label: "Body",
-    badge: (s) => (s.bodyType !== "none" ? s.bodyType.toUpperCase() : null),
+    badge: (s) =>
+      s.getActiveTab().config.body.type !== "none"
+        ? s.getActiveTab().config.body.type.toUpperCase()
+        : null,
   },
   {
     id: "auth",
@@ -43,20 +46,20 @@ const TABS: TabConfig[] = [
 ];
 
 export const RequestTabs = () => {
-  const activeTab = useRequestStore((s) => s.activeTab);
-  const setActiveTab = useRequestStore((s) => s.setActiveTab);
+  const activePanel = useRequestStore((s) => s.getActiveTab().activePanel);
+  const setActivePanel = useRequestStore((s) => s.setActivePanel);
 
   const storeState = useRequestStore((s) => s);
 
   return (
     <div className="border-border-default flex shrink-0 items-center gap-1 border-b px-4">
       {TABS.map((tab) => {
-        const isActive = tab.id === activeTab;
+        const isActive = tab.id === activePanel;
         const badge = tab.badge?.(storeState) ?? null;
         return (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => setActivePanel(tab.id)}
             className={`-mb-px flex items-center gap-1.5 border-b-2 px-3.5 py-2.5 font-sans text-[12px] transition-colors ${isActive ? "text-accent border-accent" : "text-text-ghost hover:text-text-muted hover:border-text-muted border-transparent hover:border-b-2"}`}
           >
             {tab.label}
