@@ -4,7 +4,7 @@ export type HttpMethod = (typeof HTTP_METHODS)[number];
 
 export type BodyType = "none" | "json" | "form-data" | "x-www-form-urlencoded";
 
-export type RequestTab = "params" | "headers" | "body" | "auth";
+export type RequestPanel = "params" | "headers" | "body" | "auth";
 
 export interface RequestParam {
   id: string;
@@ -54,4 +54,14 @@ export interface HistoryEntry {
   config: RequestConfig;
   response: ResponseData | null;
   sentAt: number;
+}
+
+export interface RequestTab {
+  id: string;
+  label: string;
+  config: RequestConfig;
+  activePanel: RequestPanel;
+  lastResponse: ResponseData | null;
+  lastError: string | null;
+  isLoading: boolean;
 }

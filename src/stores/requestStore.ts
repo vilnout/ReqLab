@@ -4,8 +4,8 @@ import type {
   HistoryEntry,
   HttpMethod,
   RequestConfig,
+  RequestPanel,
   RequestParam,
-  RequestTab,
   ResponseData,
 } from "@/types";
 import { create } from "zustand";
@@ -31,7 +31,7 @@ export interface RequestStore {
   isLoading: boolean;
   lastError: string | null;
 
-  activeTab: RequestTab;
+  activeTab: RequestPanel;
   lastResponse: ResponseData | null;
   collections: Collection[];
   history: HistoryEntry[];
@@ -64,7 +64,7 @@ export interface RequestStore {
   setBodyType: (type: BodyType) => void;
   setBodyContent: (content: string) => void;
 
-  setActiveTab: (tab: RequestTab) => void;
+  setActiveTab: (tab: RequestPanel) => void;
 
   setLastResponse: (response: ResponseData | null) => void;
 

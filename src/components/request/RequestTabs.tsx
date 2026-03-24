@@ -1,8 +1,8 @@
 import { useRequestStore } from "@/stores/requestStore";
-import type { RequestTab } from "@/types";
+import type { RequestPanel } from "@/types";
 
 interface TabConfig {
-  id: RequestTab;
+  id: RequestPanel;
   label: string;
   badge?: (
     state: ReturnType<typeof useRequestStore.getState>,
