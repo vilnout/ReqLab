@@ -13,9 +13,11 @@ const BODY_TYPES: { value: BodyType; label: string }[] = [
 ];
 
 export const BodyEditor = () => {
-  const method = useRequestStore((s) => s.method);
-  const bodyType = useRequestStore((s) => s.bodyType);
-  const bodyContent = useRequestStore((s) => s.bodyContent);
+  const method = useRequestStore((s) => s.getActiveTab().config.method);
+  const bodyType = useRequestStore((s) => s.getActiveTab().config.body.type);
+  const bodyContent = useRequestStore(
+    (s) => s.getActiveTab().config.body.content,
+  );
   const setBodyType = useRequestStore((s) => s.setBodyType);
   const setBodyContent = useRequestStore((s) => s.setBodyContent);
 

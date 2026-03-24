@@ -100,7 +100,9 @@ const KeyValueRow = ({
 
 export const KeyValueEditor = ({ type }: KeyValueEditorProps) => {
   const rows = useRequestStore((s) =>
-    type === "params" ? s.params : s.headers,
+    type === "params"
+      ? s.getActiveTab().config.params
+      : s.getActiveTab().config.headers,
   );
   const actions = useEditorActions(type);
 

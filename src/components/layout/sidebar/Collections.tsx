@@ -9,7 +9,7 @@ export const Collections = () => {
   const deleteCollection = useRequestStore((s) => s.deleteCollection);
 
   const loadRequest = useRequestStore((s) => s.loadRequest);
-  const deleteRequest = useRequestStore((s) => s.deleteFromCollection);
+  const deleteRequest = useRequestStore((s) => s.deleteSavedRequest);
 
   const [newCollectionName, setNewCollectionName] = useState("");
   const [creatingCollection, setCreatingCollection] = useState(false);

@@ -10,7 +10,7 @@ interface CollectionItemProps {
   onToggle: () => void;
   onDeleteCollection: () => void;
   onLoadRequest: RequestStore["loadRequest"];
-  onDeleteRequest: RequestStore["deleteFromCollection"];
+  onDeleteRequest: RequestStore["deleteSavedRequest"];
 }
 
 export const CollectionItem = ({

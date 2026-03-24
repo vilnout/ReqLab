@@ -4,6 +4,7 @@ import type {
   HistoryEntry,
   HttpMethod,
   RequestConfig,
+  RequestPanel,
   RequestParam,
   RequestTab,
   ResponseData,
@@ -11,7 +12,7 @@ import type {
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-function makeParam(partial: Partial<RequestParam> = {}): RequestParam {
+const makeParam = (partial: Partial<RequestParam> = {}): RequestParam => {
   return {
     id: crypto.randomUUID(),
     key: "",
@@ -19,29 +20,52 @@ function makeParam(partial: Partial<RequestParam> = {}): RequestParam {
     enabled: true,
     ...partial,
   };
-}
+};
+
+const makeTab = (partial: Partial<RequestTab> = {}): RequestTab => {
+  return {
+    id: crypto.randomUUID(),
+    label: "New Request",
+    config: {
+      method: "GET",
+      url: "",
+      params: [makeParam()],
+      headers: [makeParam()],
+      body: { type: "none", content: "" },
+    },
+    activePanel: "params",
+    lastResponse: null,
+    lastError: null,
+    isLoading: false,
+    ...partial,
+  };
+};
+
+const deriveLabel = (config: RequestConfig): string => {
+  if (!config.url.trim()) return "New Request";
+  try {
+    const pathname = new URL(config.url).pathname;
+    const segments = pathname.split("/").filter(Boolean);
+    const last = segments[segments.length - 1];
+    return last ? `${config.method} /${last}` : config.method;
+  } catch {
+    return config.method;
+  }
+};
 
 export interface RequestStore {
-  method: HttpMethod;
-  url: string;
-  params: RequestParam[];
-  headers: RequestParam[];
-  bodyType: BodyType;
-  bodyContent: string;
-  isLoading: boolean;
-  lastError: string | null;
+  // Tabs
+  tabs: RequestTab[];
+  activeTabId: string;
 
-  activeTab: RequestTab;
-  lastResponse: ResponseData | null;
-  collections: Collection[];
-  history: HistoryEntry[];
+  // Tab Managment
+  addTab: () => void;
+  closeTab: (id: string) => void;
+  setActiveTab: (id: string) => void;
 
+  // Active Tab config
   setMethod: (method: HttpMethod) => void;
   setUrl: (url: string) => void;
-
-  setIsLoading: (loading: boolean) => void;
-
-  setLastError: (error: string | null) => void;
 
   addParam: () => void;
   updateParam: (
@@ -50,7 +74,6 @@ export interface RequestStore {
     value: string | boolean,
   ) => void;
   deleteParam: (id: string) => void;
-  clearParams: () => void;
 
   addHeader: () => void;
   updateHeader: (
@@ -59,85 +82,193 @@ export interface RequestStore {
     value: string | boolean,
   ) => void;
   deleteHeader: (id: string) => void;
-  clearHeaders: () => void;
 
   setBodyType: (type: BodyType) => void;
   setBodyContent: (content: string) => void;
 
-  setActiveTab: (tab: RequestTab) => void;
+  // Active Tab ui
+  setActivePanel: (panel: RequestPanel) => void;
 
+  // Active tab response state
   setLastResponse: (response: ResponseData | null) => void;
+  setLastError: (error: string | null) => void;
+  setIsLoading: (loading: boolean) => void;
+
+  // Collections and history
+  collections: Collection[];
+  history: HistoryEntry[];
 
   saveToCollection: (collectionId: string, name: string) => void;
-  deleteFromCollection: (collectionId: string, id: string) => void;
   createCollection: (name: string) => void;
+  deleteSavedRequest: (collectionId: string, id: string) => void;
   deleteCollection: (id: string) => void;
   loadRequest: (config: RequestConfig) => void;
 
   addHistoryEntry: (entry: Omit<HistoryEntry, "id" | "sentAt">) => void;
   clearHistory: () => void;
 
+  // Derived
+  getActiveTab: () => RequestTab;
   getRequestConfig: () => RequestConfig;
 }
+
+const updateActiveConfig = (
+  state: RequestStore,
+  configUpdate: Partial<RequestConfig>,
+): Partial<RequestStore> => {
+  const tabs = state.tabs.map((tab) =>
+    tab.id === state.activeTabId
+      ? {
+          ...tab,
+          config: { ...tab.config, ...configUpdate },
+          label: deriveLabel({ ...tab.config, ...configUpdate }),
+        }
+      : tab,
+  );
+  return { tabs };
+};
+
+const updateActiveTab = (
+  state: RequestStore,
+  tabUpdate: Partial<RequestTab>,
+): Partial<RequestStore> => {
+  const tabs = state.tabs.map((tab) =>
+    tab.id === state.activeTabId ? { ...tab, ...tabUpdate } : tab,
+  );
+  return { tabs };
+};
+
+const updateActiveTabRows = (
+  state: RequestStore,
+  field: "params" | "headers",
+  updater: (rows: RequestParam[]) => RequestParam[],
+): Partial<RequestStore> => {
+  return updateActiveConfig(state, {
+    [field]: updater(state.getActiveTab().config[field]),
+  });
+};
+
+const initialTab = makeTab({
+  config: {
+    method: "GET",
+    url: "https://jsonplaceholder.typicode.com/posts/1",
+    params: [makeParam()],
+    headers: [makeParam()],
+    body: { type: "none", content: "" },
+  },
+  label: "GET /1",
+});
 
 export const useRequestStore = create<RequestStore>()(
   persist(
     (set, get) => ({
       // Initial State
-      method: "GET",
-      url: "https://jsonplaceholder.typicode.com/posts/1",
-      params: [makeParam()],
-      headers: [makeParam()],
-      bodyType: "none",
-      bodyContent: "",
-      activeTab: "params",
-      lastResponse: null,
+      tabs: [initialTab],
+      activeTabId: initialTab.id,
       collections: [],
       history: [],
-      isLoading: false,
-      lastError: null,
 
-      setIsLoading: (isLoading) => set({ isLoading }),
+      // Tab managment
+      addTab: () => {
+        const tab = makeTab();
+        set((state) => ({
+          tabs: [...state.tabs, tab],
+          activeTabId: tab.id,
+        }));
+      },
 
-      setLastError: (lastError) => set({ lastError }),
+      closeTab: (id) =>
+        set((state) => {
+          if (state.tabs.length === 1) {
+            const fresh = makeTab();
+            return { tabs: [fresh], activeTabId: fresh.id };
+          }
+          const idx = state.tabs.findIndex((t) => t.id === id);
+          const filtered = state.tabs.filter((t) => t.id !== id);
+          const newActiveId =
+            id === state.activeTabId
+              ? (filtered[Math.max(0, idx - 1)]?.id ?? filtered[0].id)
+              : state.activeTabId;
+          return { tabs: filtered, activeTabId: newActiveId };
+        }),
+      setActiveTab: (activeTabId) => set({ activeTabId }),
 
-      setMethod: (method) => set({ method }),
-      setUrl: (url) => set({ url }),
+      // Config actions
+      setMethod: (method) =>
+        set((state) => updateActiveConfig(state, { method })),
+      setUrl: (url) => set((state) => updateActiveConfig(state, { url })),
 
       addParam: () =>
-        set((state) => ({ params: [...state.params, makeParam()] })),
+        set((state) =>
+          updateActiveTabRows(state, "params", (rows) => [
+            ...rows,
+            makeParam(),
+          ]),
+        ),
+
       updateParam: (id, field, value) =>
-        set((state) => ({
-          params: state.params.map((p) =>
-            p.id === id ? { ...p, [field]: value } : p,
+        set((state) =>
+          updateActiveTabRows(state, "params", (rows) =>
+            rows.map((p) => (p.id === id ? { ...p, [field]: value } : p)),
           ),
-        })),
+        ),
+
       deleteParam: (id) =>
-        set((state) => {
-          const remaining = state.params.filter((p) => p.id !== id);
-          return {
-            params: remaining.length > 0 ? remaining : [makeParam()],
-          };
-        }),
-      clearParams: () => set({ params: [makeParam()] }),
+        set((state) =>
+          updateActiveTabRows(state, "params", (rows) => {
+            const filtered = rows.filter((p) => p.id !== id);
+            return filtered.length > 0 ? filtered : [makeParam()];
+          }),
+        ),
+
       addHeader: () =>
-        set((state) => ({ headers: [...state.headers, makeParam()] })),
-      updateHeader: (id, field, string) =>
-        set((state) => ({
-          headers: state.headers.map((h) =>
-            h.id === id ? { ...h, [field]: string } : h,
+        set((state) =>
+          updateActiveTabRows(state, "headers", (rows) => [
+            ...rows,
+            makeParam(),
+          ]),
+        ),
+
+      updateHeader: (id, field, value) =>
+        set((state) =>
+          updateActiveTabRows(state, "headers", (rows) =>
+            rows.map((h) => (h.id === id ? { ...h, [field]: value } : h)),
           ),
-        })),
+        ),
+
       deleteHeader: (id) =>
-        set((state) => {
-          const remaining = state.headers.filter((h) => h.id !== id);
-          return { headers: remaining.length > 0 ? remaining : [makeParam()] };
-        }),
-      clearHeaders: () => set({ headers: [makeParam()] }),
-      setBodyType: (type) => set({ bodyType: type }),
-      setBodyContent: (content) => set({ bodyContent: content }),
-      setActiveTab: (tab) => set({ activeTab: tab }),
-      setLastResponse: (response) => set({ lastResponse: response }),
+        set((state) =>
+          updateActiveTabRows(state, "headers", (rows) => {
+            const filtered = rows.filter((h) => h.id !== id);
+            return filtered.length > 0 ? filtered : [makeParam()];
+          }),
+        ),
+      setBodyType: (bodyType) =>
+        set((state) =>
+          updateActiveConfig(state, {
+            body: { ...state.getActiveTab().config.body, type: bodyType },
+          }),
+        ),
+      setBodyContent: (content) =>
+        set((state) =>
+          updateActiveConfig(state, {
+            body: { ...state.getActiveTab().config.body, content },
+          }),
+        ),
+
+      // Ui
+      setActivePanel: (panel) =>
+        set((state) => updateActiveTab(state, { activePanel: panel })),
+
+      // Response
+      setLastResponse: (lastResponse) =>
+        set((state) => updateActiveTab(state, { lastResponse })),
+      setLastError: (lastError) =>
+        set((state) => updateActiveTab(state, { lastError })),
+      setIsLoading: (isLoading) =>
+        set((state) => updateActiveTab(state, { isLoading })),
+
+      //Collections
       createCollection: (name) =>
         set((state) => ({
           collections: [
@@ -150,10 +281,12 @@ export const useRequestStore = create<RequestStore>()(
             },
           ],
         })),
+
       deleteCollection: (id) =>
         set((state) => ({
           collections: state.collections.filter((c) => c.id !== id),
         })),
+
       saveToCollection: (collectionId, name) => {
         const config = get().getRequestConfig();
         set((state) => ({
@@ -175,7 +308,8 @@ export const useRequestStore = create<RequestStore>()(
           ),
         }));
       },
-      deleteFromCollection: (collectionId, id) => {
+
+      deleteSavedRequest: (collectionId, id) => {
         set((state) => ({
           collections: state.collections.map((c) =>
             c.id === collectionId
@@ -184,16 +318,30 @@ export const useRequestStore = create<RequestStore>()(
           ),
         }));
       },
+
       loadRequest: (config) =>
-        set({
-          method: config.method,
-          url: config.url,
-          params: config.params.length > 0 ? config.params : [makeParam()],
-          headers: config.headers.length > 0 ? config.headers : [makeParam()],
-          bodyType: config.body.type,
-          bodyContent: config.body.content,
-          lastResponse: null,
-        }),
+        set((state) => ({
+          tabs: state.tabs.map((tab) =>
+            tab.id === state.activeTabId
+              ? {
+                  ...tab,
+                  config: {
+                    ...config,
+                    params:
+                      config.params.length > 0 ? config.params : [makeParam()],
+                    headers:
+                      config.headers.length > 0
+                        ? config.headers
+                        : [makeParam()],
+                  },
+                  label: deriveLabel(config),
+                  lastResponse: null,
+                  lastError: null,
+                }
+              : tab,
+          ),
+        })),
+
       addHistoryEntry: (entry) =>
         set((state) => ({
           history: [
@@ -201,26 +349,30 @@ export const useRequestStore = create<RequestStore>()(
             ...state.history,
           ].slice(0, 50),
         })),
+
       clearHistory: () => set({ history: [] }),
-      getRequestConfig: () => {
-        const { method, url, params, headers, bodyType, bodyContent } = get();
-        return {
-          method,
-          url,
-          params,
-          headers,
-          body: {
-            type: bodyType,
-            content: bodyContent,
-          },
-        };
+
+      // Derived
+      getActiveTab: () => {
+        const state = get();
+        return (
+          state.tabs.find((t) => t.id === state.activeTabId) ?? state.tabs[0]
+        );
       },
+      getRequestConfig: () => get().getActiveTab().config,
     }),
     {
       name: "reqlab-workspace",
       partialize: (state) => ({
         collections: state.collections,
         history: state.history,
+        tabs: state.tabs.map((tab) => ({
+          ...tab,
+          lastResponse: null,
+          lastError: null,
+          isLoading: false,
+        })),
+        activeTabId: state.activeTabId,
       }),
     },
   ),

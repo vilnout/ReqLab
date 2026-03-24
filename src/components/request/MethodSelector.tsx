@@ -9,7 +9,7 @@ const METHOD_STYLES: Record<HttpMethod, { bg: string; text: string }> = {
   GET: { bg: "bg-status-success-bg", text: "text-status-success" },
   POST: { bg: "bg-accent-dim", text: "text-accent" },
   PUT: { bg: "bg-status-warning-bg", text: "text-status-warning" },
-  PATCH: { bg: "bg-[#0d1f3b]", text: "test-[#58a6ff" },
+  PATCH: { bg: "bg-[#0d1f3b]", text: "text-[#58a6ff]" },
   DELETE: { bg: "bg-status-error-bg", text: "text-status-error" },
 };
 
@@ -31,7 +31,7 @@ export const MethodBadge = ({ method, size = "md" }: MethodBadgeProps) => {
 
 export const MethodSelector = () => {
   const [open, setOpen] = useState(false);
-  const method = useRequestStore((s) => s.method);
+  const method = useRequestStore((s) => s.getActiveTab().config.method);
   const setMethod = useRequestStore((s) => s.setMethod);
   const ref = useRef<HTMLDivElement>(null);
 
