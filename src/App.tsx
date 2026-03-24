@@ -1,15 +1,13 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import { TopBar } from "@/components/layout/TopBar";
-import { RequestPanel } from "@/components/request/RequestPanel";
-import { ResponsePanel } from "@/components/response/ResponsePanel";
+import { WorkspacePanel } from "@/components/layout/WorkspacePanel";
 
 const App = () => {
   return (
     <div className="bg-surface-base flex h-screen flex-col overflow-hidden">
       <TopBar />
       <AppLayout>
-        <RequestPanel />
-        <ResponsePanel />
+        <WorkspacePanel />
       </AppLayout>
     </div>
   );
