@@ -38,7 +38,7 @@ export const SaveRequest = () => {
     <div className="relative" ref={ref}>
       <button
         onClick={open ? () => setOpen(false) : handleOpen}
-        className={`border-border-default flex h-7 items-center gap-1.5 rounded border px-2.5 font-mono text-xs transition-colors ${
+        className={`border-border-default flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded border px-2.5 font-mono text-xs transition-colors ${
           saved
             ? "text-status-success border-status-success-bg"
             : "text-text-ghost hover:text-text-muted hover:border-border-subtle"
