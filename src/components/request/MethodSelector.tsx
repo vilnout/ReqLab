@@ -54,7 +54,7 @@ export const MethodSelector = () => {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="bg-surface-raised border-border-default hover:border-border-subtle flex h-9 items-center gap-2 rounded border px-3 transition-colors"
+        className="bg-surface-raised border-border-default hover:border-border-subtle flex h-9 cursor-pointer items-center gap-2 rounded border px-3 transition-colors"
       >
         <MethodBadge method={method} />
         <ChevronDown
@@ -69,7 +69,7 @@ export const MethodSelector = () => {
             <button
               key={m}
               onClick={() => handleSelect(m)}
-              className={`hover:bg-surface-overlay flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors ${m === method ? "bg-surface-overlay" : ""}`}
+              className={`hover:bg-surface-overlay flex w-full cursor-pointer items-center gap-2.5 px-3 py-2 text-left transition-colors ${m === method ? "bg-surface-overlay" : ""}`}
             >
               <MethodBadge method={m} />
             </button>

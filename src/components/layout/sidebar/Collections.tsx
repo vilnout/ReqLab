@@ -53,7 +53,7 @@ export const Collections = ({ onNavigate }: CollectionsProps) => {
         </span>
         <button
           onClick={() => setCreatingCollection((v) => !v)}
-          className="text-text-ghost hover:text-accent hover:bg-surface-raised rounded p-1 text-base leading-none transition-colors"
+          className="text-text-ghost hover:text-accent hover:bg-surface-raised cursor-pointer rounded p-1 text-base leading-none transition-colors"
         >
           <Plus size={15} strokeWidth={2} />
         </button>
@@ -75,7 +75,7 @@ export const Collections = ({ onNavigate }: CollectionsProps) => {
           />
           <button
             onClick={handleCreateCollection}
-            className="bg-accent shrink-0 rounded px-2 py-1 font-mono text-xs text-white"
+            className="bg-accent shrink-0 cursor-pointer rounded px-2 py-1 font-mono text-xs text-white"
           >
             Add
           </button>

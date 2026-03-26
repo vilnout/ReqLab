@@ -90,7 +90,7 @@ const KeyValueRow = ({
       />
       <button
         onClick={() => onDelete(row.id)}
-        className="group-hover:text-text-ghost hover:text-status-error! hidden items-center justify-center text-transparent transition-colors md:flex"
+        className="group-hover:text-text-ghost hover:text-status-error! hidden cursor-pointer items-center justify-center text-transparent transition-colors md:flex"
       >
         <X size={12} strokeWidth={2} />
       </button>
@@ -151,7 +151,7 @@ export const KeyValueEditor = ({ type }: KeyValueEditorProps) => {
         ))}
         <button
           onClick={() => handleAdd(true)}
-          className="text-text-ghost hover:text-accent hover:bg-surface-raised flex w-full items-center gap-2 px-3 py-2 font-mono text-[11px] transition-colors"
+          className="text-text-ghost hover:text-accent hover:bg-surface-raised flex w-full cursor-pointer items-center gap-2 px-3 py-2 font-mono text-[11px] transition-colors"
         >
           <Plus size={11} strokeWidth={2} />
           Add {type === "params" ? "parameter" : "header"}
