@@ -14,7 +14,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
       <div className="flex flex-1 overflow-hidden">
-        <div className="hidden md:flex">
+        <div className="hidden w-55 md:flex">
           <Sidebar />
         </div>
         <main className="bg-surface-base flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -23,9 +23,5 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
         </main>
       </div>
     </>
-    //   <main className="bg-surface-base flex flex-1 flex-col overflow-hidden">
-    //     {children}
-    //   </main>
-    // </div>
   );
 };

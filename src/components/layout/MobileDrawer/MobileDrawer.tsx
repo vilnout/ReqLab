@@ -52,7 +52,7 @@ export const MobileDrawer = ({ open, onClose }: MobileDrawerProps) => {
             <X size={14} strokeWidth={2} />
           </button>
         </div>
-        <div className="h-full overflow-hidden">
+        <div className="flex h-[90%] overflow-hidden">
           <Sidebar onNavigate={onClose} />
         </div>
       </div>

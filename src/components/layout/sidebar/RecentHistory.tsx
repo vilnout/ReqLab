@@ -21,7 +21,7 @@ export const RecentHistory = ({ onNavigate }: RecentHistoryProps) => {
     }
   };
   return (
-    <div className="border-border-default flex max-h-60 shrink-0 flex-col border-t">
+    <div className="border-border-default mb-5 flex max-h-60 shrink-0 flex-col border-t">
       <div className="group flex shrink-0 items-center justify-between px-3.5 py-2">
         <div className="flex items-center gap-1.5">
           <Clock size={11} strokeWidth={2} className="text-text-ghost" />

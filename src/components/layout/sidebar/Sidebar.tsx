@@ -7,7 +7,7 @@ interface SidebarProps {
 
 export const Sidebar = ({ onNavigate }: SidebarProps) => {
   return (
-    <aside className="bg-surface-overlay border-border-default flex w-55 shrink-0 flex-col overflow-hidden border-r">
+    <aside className="bg-surface-overlay border-border-default flex w-full shrink-0 flex-col overflow-hidden border-r">
       <Collections onNavigate={onNavigate} />
       <RecentHistory onNavigate={onNavigate} />
     </aside>
