@@ -1,9 +1,14 @@
 import { CollectionItem } from "@/components/layout/sidebar/CollectionItem";
 import { useRequestStore } from "@/stores/requestStore";
+import type { RequestConfig } from "@/types";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-export const Collections = () => {
+interface CollectionsProps {
+  onNavigate?: () => void;
+}
+
+export const Collections = ({ onNavigate }: CollectionsProps) => {
   const collections = useRequestStore((s) => s.collections);
   const createCollection = useRequestStore((s) => s.createCollection);
   const deleteCollection = useRequestStore((s) => s.deleteCollection);
@@ -34,6 +39,10 @@ export const Collections = () => {
       }
       return next;
     });
+  };
+  const handleLoadRequest = (config: RequestConfig) => {
+    loadRequest(config);
+    onNavigate?.();
   };
   return (
     <div className="flex flex-1 shrink-0 flex-col">
@@ -91,7 +100,7 @@ export const Collections = () => {
             isExpanded={expandedCollections.has(collection.id)}
             onToggle={() => toggleCollection(collection.id)}
             onDeleteCollection={() => deleteCollection(collection.id)}
-            onLoadRequest={loadRequest}
+            onLoadRequest={handleLoadRequest}
             onDeleteRequest={deleteRequest}
           />
         ))}

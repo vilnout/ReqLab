@@ -57,7 +57,7 @@ export const MobileDrawer = ({ open, onClose }: MobileDrawerProps) => {
           </button>
         </div>
         <div className="h-full overflow-hidden">
-          <Sidebar />
+          <Sidebar onNavigate={onClose} />
         </div>
       </div>
     </>
