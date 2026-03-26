@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/layout/sidebar";
+import { SiteLogo } from "@/components/ui/SiteLogo";
 import { X } from "lucide-react";
 import { useEffect } from "react";
 
@@ -39,16 +40,11 @@ export const MobileDrawer = ({ open, onClose }: MobileDrawerProps) => {
 
       {/* Drawer panel */}
       <div
-        className={`bg-surface-overlay border-border-default fixed top-0 bottom-0 left-0 z-50 w-[280px] transform border-r transition-transform duration-200 ease-out md:hidden ${open ? "translate-x-0" : "-translate-x-full"} `}
+        className={`bg-surface-overlay border-border-default fixed top-0 bottom-0 left-0 z-50 w-70 transform border-r transition-transform duration-200 ease-out md:hidden ${open ? "translate-x-0" : "-translate-x-full"} `}
       >
         {/* Header */}
         <div className="border-border-default flex items-center justify-between border-b px-4 py-3">
-          <div className="flex items-center gap-2">
-            <div className="bg-accent h-2 w-2 rounded-full shadow-[0_0_8px_var(--color-accent)]" />
-            <span className="text-text-primary font-mono text-sm font-semibold tracking-widest">
-              REQLAB
-            </span>
-          </div>
+          <SiteLogo />
           <button
             onClick={onClose}
             className="text-text-ghost hover:text-text-primary hover:bg-surface-raised flex h-7 w-7 items-center justify-center rounded transition-colors"

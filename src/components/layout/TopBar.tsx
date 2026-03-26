@@ -1,4 +1,5 @@
 import { MethodBadge } from "@/components/request/MethodSelector";
+import { SiteLogo } from "@/components/ui/SiteLogo";
 import { useRequestStore } from "@/stores/requestStore";
 import { History, Plus, Settings, X } from "lucide-react";
 
@@ -10,11 +11,8 @@ export const TopBar = () => {
   const setActiveTab = useRequestStore((s) => s.setActiveTab);
   return (
     <header className="bg-surface-overlay border-border-default flex h-11 shrink-0 items-center gap-3 border-b px-4">
-      <div className="border-border-default flex h-full shrink-0 items-center gap-2 border-r px-4">
-        <div className="bg-accent h-2 w-2 rounded-full shadow-[0_0_8px_var(--color-accent)]" />
-        <span className="text-text-primary font-mono text-sm font-semibold tracking-widest">
-          REQLAB
-        </span>
+      <div className="border-border-default flex h-full shrink-0 items-center border-r px-4">
+        <SiteLogo />
       </div>
 
       <div className="flex h-full flex-1 items-center gap-1">
