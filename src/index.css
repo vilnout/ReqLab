@@ -42,3 +42,23 @@
 @utility response-pills {
   @apply bg-surface-raised border-border-default text-text-subtle rounded-full border px-2 py-0.5 font-mono text-[11px];
 }
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-raised) 0%,
+    var(--color-border-subtle) 50%,
+    var(--color-surface-raised) 100%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
