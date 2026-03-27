@@ -46,30 +46,36 @@ export const UrlBar = () => {
     }
   };
   return (
-    <div className="border-border-default flex shrink-0 items-center gap-2 border-b px-4 py-3">
-      <MethodSelector />
-      <input
-        ref={inputRef}
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Enter URL"
-        spellCheck={false}
-        className="bg-surface-raised border-border-default text-text-primary placeholder:text-text-ghost focus:border-accent h-9 flex-1 rounded border px-3 font-mono text-[13px] transition-all outline-none focus:shadow-[0_0_0_2px_rgba(249,115,22,0.12)]"
-      />
+    <div className="border-border-default grid shrink-0 items-center gap-2 border-b px-4 py-3 md:flex">
+      <div className="flex flex-1 gap-1">
+        <MethodSelector />
+        <input
+          ref={inputRef}
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Enter URL"
+          spellCheck={false}
+          className="bg-surface-raised border-border-default text-text-primary placeholder:text-text-ghost focus:border-accent h-9 flex-1 rounded border px-3 font-mono text-[13px] transition-all outline-none focus:shadow-[0_0_0_2px_rgba(249,115,22,0.12)]"
+        />
+      </div>
       <button
         onClick={handleSend}
         disabled={loading || !url.trim()}
-        className="bg-accent hover:bg-accent-hover flex h-9 cursor-pointer items-center gap-2 rounded px-5 font-sans text-[13px] font-semibold text-white shadow-[0_0_12px_rgba(249,115,22,0.25)] transition-all hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+        className="bg-accent hover:bg-accent-hover flex h-9 flex-1 cursor-pointer items-center justify-center gap-2 rounded px-5 font-sans text-[13px] font-semibold text-white shadow-[0_0_12px_rgba(249,115,22,0.25)] transition-all hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none md:flex-initial"
       >
-        {loading ? (
-          <Loader2 size={14} strokeWidth={2} className="animate-spin" />
-        ) : (
-          <Send size={14} strokeWidth={2} />
-        )}
-        {loading ? "Sending" : "Send"}
+        <div className="flex items-center justify-center gap-1">
+          {loading ? (
+            <Loader2 size={14} strokeWidth={2} className="animate-spin" />
+          ) : (
+            <Send size={14} strokeWidth={2} />
+          )}
+          {loading ? "Sending" : "Send"}
+        </div>
       </button>
-      <SaveRequest />
+      <div className="flex-1 md:flex-initial">
+        <SaveRequest />
+      </div>
     </div>
   );
 };

@@ -1,9 +1,14 @@
 import { CollectionItem } from "@/components/layout/sidebar/CollectionItem";
 import { useRequestStore } from "@/stores/requestStore";
+import type { RequestConfig } from "@/types";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-export const Collections = () => {
+interface CollectionsProps {
+  onNavigate?: () => void;
+}
+
+export const Collections = ({ onNavigate }: CollectionsProps) => {
   const collections = useRequestStore((s) => s.collections);
   const createCollection = useRequestStore((s) => s.createCollection);
   const deleteCollection = useRequestStore((s) => s.deleteCollection);
@@ -35,6 +40,10 @@ export const Collections = () => {
       return next;
     });
   };
+  const handleLoadRequest = (config: RequestConfig) => {
+    loadRequest(config);
+    onNavigate?.();
+  };
   return (
     <div className="flex flex-1 shrink-0 flex-col">
       {/*collections*/}
@@ -44,7 +53,7 @@ export const Collections = () => {
         </span>
         <button
           onClick={() => setCreatingCollection((v) => !v)}
-          className="text-text-ghost hover:text-accent hover:bg-surface-raised rounded p-1 text-base leading-none transition-colors"
+          className="text-text-ghost hover:text-accent hover:bg-surface-raised cursor-pointer rounded p-1 text-base leading-none transition-colors"
         >
           <Plus size={15} strokeWidth={2} />
         </button>
@@ -66,7 +75,7 @@ export const Collections = () => {
           />
           <button
             onClick={handleCreateCollection}
-            className="bg-accent shrink-0 rounded px-2 py-1 font-mono text-xs text-white"
+            className="bg-accent shrink-0 cursor-pointer rounded px-2 py-1 font-mono text-xs text-white"
           >
             Add
           </button>
@@ -91,7 +100,7 @@ export const Collections = () => {
             isExpanded={expandedCollections.has(collection.id)}
             onToggle={() => toggleCollection(collection.id)}
             onDeleteCollection={() => deleteCollection(collection.id)}
-            onLoadRequest={loadRequest}
+            onLoadRequest={handleLoadRequest}
             onDeleteRequest={deleteRequest}
           />
         ))}

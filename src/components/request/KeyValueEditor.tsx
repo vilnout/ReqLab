@@ -61,14 +61,14 @@ const KeyValueRow = ({
 
   return (
     <div
-      className={`border-border-default group grid grid-cols-[28px_1fr_1fr_28px] border-b last:border-b-0 ${!row.enabled ? "opacity-40" : ""}`}
+      className={`border-border-default group flex flex-col border-b last:border-b-0 md:grid md:grid-cols-[28px_1fr_1fr_28px] ${!row.enabled ? "opacity-40" : ""}`}
     >
       <div className="flex items-center justify-center">
         <input
           type="checkbox"
           checked={row.enabled}
           onChange={(e) => onUpdate(row.id, "enabled", e.target.checked)}
-          className="accent-accent h-3 w-3 cursor-pointer"
+          className="accent-accent hidden h-3 w-3 cursor-pointer md:flex"
         />
       </div>
 
@@ -90,7 +90,7 @@ const KeyValueRow = ({
       />
       <button
         onClick={() => onDelete(row.id)}
-        className="group-hover:text-text-ghost hover:text-status-error! flex items-center justify-center text-transparent transition-colors"
+        className="group-hover:text-text-ghost hover:text-status-error! hidden cursor-pointer items-center justify-center text-transparent transition-colors md:flex"
       >
         <X size={12} strokeWidth={2} />
       </button>
@@ -120,7 +120,7 @@ export const KeyValueEditor = ({ type }: KeyValueEditorProps) => {
   return (
     <div className="p-4">
       <div className="border-border-default overflow-hidden rounded border">
-        <div className="bg-surface-overlay border-border-default grid grid-cols-[28px_1fr_1fr_28px] border-b">
+        <div className="bg-surface-overlay border-border-default hidden grid-cols-[28px_1fr_1fr_28px] border-b md:grid">
           <div />
           {["Key", "Value"].map((label) => (
             <div
@@ -151,7 +151,7 @@ export const KeyValueEditor = ({ type }: KeyValueEditorProps) => {
         ))}
         <button
           onClick={() => handleAdd(true)}
-          className="text-text-ghost hover:text-accent hover:bg-surface-raised flex w-full items-center gap-2 px-3 py-2 font-mono text-[11px] transition-colors"
+          className="text-text-ghost hover:text-accent hover:bg-surface-raised flex w-full cursor-pointer items-center gap-2 px-3 py-2 font-mono text-[11px] transition-colors"
         >
           <Plus size={11} strokeWidth={2} />
           Add {type === "params" ? "parameter" : "header"}

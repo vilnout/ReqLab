@@ -94,26 +94,30 @@ export const ResponsePanel = () => {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/*Header*/}
-      <div className="border-border-default flex shrink-0 items-center gap-2.5 border-b px-4 py-2.5">
-        <span className="text-text-ghost mr-1 font-mono text-xs font-semibold tracking-widest uppercase">
-          Response
-        </span>
-        {/*status indicator*/}
-        <div
-          className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${statusMeta.bgPrimary} ${statusMeta.text} `}
-        >
-          <div
-            className={`h-1.5 w-1.5 rounded-full ${statusMeta.bgSecondary}`}
-          />
-          {status} {statusText}
+      <div className="border-border-default grid shrink-0 items-center gap-2.5 border-b px-4 py-2.5 md:flex">
+        <div className="flex items-center justify-between gap-1">
+          <span className="text-text-ghost mr-1 font-mono text-xs font-semibold tracking-widest uppercase">
+            Response
+          </span>
+          {/*status indicator*/}
+          <div className="flex gap-1">
+            <div
+              className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${statusMeta.bgPrimary} ${statusMeta.text} `}
+            >
+              <div
+                className={`h-1.5 w-1.5 rounded-full ${statusMeta.bgSecondary}`}
+              />
+              {status} {statusText}
+            </div>
+            <div className="response-pills">{formatTiming(timingMs)}</div>
+            <div className="response-pills">{formatBytes(size)}</div>
+          </div>
         </div>
-        <div className="response-pills">{formatTiming(timingMs)}</div>
-        <div className="response-pills">{formatBytes(size)}</div>
         {/*actions*/}
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="flex items-center justify-between gap-1.5 md:ml-auto">
           <button
             onClick={handleCopy}
-            className="border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle flex cursor-pointer items-center gap-1.5 rounded border px-2.5 py-1 font-mono text-xs transition-colors"
+            className="border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle flex cursor-pointer items-center gap-1.5 rounded border px-2.5 py-1 text-center font-mono text-xs transition-colors"
           >
             {copied ? (
               <>
@@ -132,15 +136,17 @@ export const ResponsePanel = () => {
             )}
           </button>
           {/*view tabs */}
-          {RESPONSE_TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`cursor-pointer rounded px-2.5 py-1 font-mono text-xs capitalize transition-colors ${activeTab === tab ? "bg-accent-dim text-accent" : "text-text-ghost hover:text-text-muted"} `}
-            >
-              {tab}
-            </button>
-          ))}
+          <div className="flex">
+            {RESPONSE_TABS.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`cursor-pointer rounded px-2.5 py-1 font-mono text-xs capitalize transition-colors ${activeTab === tab ? "bg-accent-dim text-accent" : "text-text-ghost hover:text-text-muted"} `}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       {/*response body*/}

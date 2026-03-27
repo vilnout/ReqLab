@@ -1,4 +1,5 @@
 import { MethodBadge } from "@/components/request/MethodSelector";
+import { SiteLogo } from "@/components/ui/SiteLogo";
 import { useRequestStore } from "@/stores/requestStore";
 import { History, Plus, Settings, X } from "lucide-react";
 
@@ -9,12 +10,9 @@ export const TopBar = () => {
   const closeTab = useRequestStore((s) => s.closeTab);
   const setActiveTab = useRequestStore((s) => s.setActiveTab);
   return (
-    <header className="bg-surface-overlay border-border-default flex h-11 shrink-0 items-center gap-3 border-b px-4">
-      <div className="border-border-default flex h-full shrink-0 items-center gap-2 border-r px-4">
-        <div className="bg-accent h-2 w-2 rounded-full shadow-[0_0_8px_var(--color-accent)]" />
-        <span className="text-text-primary font-mono text-sm font-semibold tracking-widest">
-          REQLAB
-        </span>
+    <header className="bg-surface-overlay border-border-default flex h-11 shrink-0 items-center gap-1 border-b px-1 md:gap-3 md:px-4">
+      <div className="border-border-default flex h-full shrink-0 items-center border-r px-4 md:w-51">
+        <SiteLogo />
       </div>
 
       <div className="flex h-full flex-1 items-center gap-1">
@@ -24,7 +22,7 @@ export const TopBar = () => {
             <div
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`group border-border-default flex h-full max-w-45 min-w-0 shrink-0 cursor-pointer items-center gap-2 border-r px-3 transition-colors ${isActive ? "bg-surface-base border-b-accent -mb-px border-b-2" : "bg-surface-overlay hover:bg-surface-raised"}`}
+              className={`group border-border-default flex h-full max-w-45 min-w-0 shrink-0 cursor-pointer items-center gap-2 border-r px-3 transition-colors ${isActive ? "bg-surface-base border-b-accent -mb-px flex border-b-2" : "bg-surface-overlay hover:bg-surface-raised hidden md:flex"}`}
             >
               <MethodBadge method={tab.config.method} size="sm" />
               <span className="text-text-muted min-w-0 flex-1 truncate font-mono text-xs">

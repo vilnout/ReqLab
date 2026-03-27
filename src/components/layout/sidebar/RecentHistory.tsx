@@ -4,7 +4,11 @@ import { useRequestStore } from "@/stores/requestStore";
 import type { HistoryEntry } from "@/types";
 import { Clock } from "lucide-react";
 
-export const RecentHistory = () => {
+interface RecentHistoryProps {
+  onNavigate?: () => void;
+}
+
+export const RecentHistory = ({ onNavigate }: RecentHistoryProps) => {
   const history = useRequestStore((s) => s.history);
   const clearHistory = useRequestStore((s) => s.clearHistory);
   const loadRequest = useRequestStore((s) => s.loadRequest);
@@ -17,7 +21,7 @@ export const RecentHistory = () => {
     }
   };
   return (
-    <div className="border-border-default flex max-h-60 shrink-0 flex-col border-t">
+    <div className="border-border-default mb-5 flex max-h-60 shrink-0 flex-col border-t">
       <div className="group flex shrink-0 items-center justify-between px-3.5 py-2">
         <div className="flex items-center gap-1.5">
           <Clock size={11} strokeWidth={2} className="text-text-ghost" />
@@ -39,7 +43,10 @@ export const RecentHistory = () => {
         {history.map((entry) => (
           <button
             key={entry.id}
-            onClick={() => loadRequest(entry.config)}
+            onClick={() => {
+              loadRequest(entry.config);
+              onNavigate?.();
+            }}
             className="hover:bg-surface-raised group flex w-full cursor-pointer items-center gap-2 px-3 py-1.5 transition-colors"
           >
             <MethodBadge method={entry.config.method} size="sm" />
