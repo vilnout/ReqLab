@@ -37,6 +37,7 @@ const makeTab = (partial: Partial<RequestTab> = {}): RequestTab => {
     lastResponse: null,
     lastError: null,
     isLoading: false,
+    isTransitioning: false,
     ...partial,
   };
 };
@@ -110,6 +111,9 @@ export interface RequestStore {
   // Proxy
   useProxy: boolean;
   toggleProxy: () => void;
+
+  // Loading state
+  setIsTransitioning: (loading: boolean) => void;
 
   // Derived
   getActiveTab: () => RequestTab;
@@ -324,28 +328,35 @@ export const useRequestStore = create<RequestStore>()(
         }));
       },
 
-      loadRequest: (config) =>
-        set((state) => ({
-          tabs: state.tabs.map((tab) =>
-            tab.id === state.activeTabId
-              ? {
-                  ...tab,
-                  config: {
-                    ...config,
-                    params:
-                      config.params.length > 0 ? config.params : [makeParam()],
-                    headers:
-                      config.headers.length > 0
-                        ? config.headers
-                        : [makeParam()],
-                  },
-                  label: deriveLabel(config),
-                  lastResponse: null,
-                  lastError: null,
-                }
-              : tab,
-          ),
-        })),
+      loadRequest: (config) => {
+        set((state) => updateActiveTab(state, { isTransitioning: true }));
+        setTimeout(() => {
+          set((state) => ({
+            tabs: state.tabs.map((tab) =>
+              tab.id === state.activeTabId
+                ? {
+                    ...tab,
+                    config: {
+                      ...config,
+                      params:
+                        config.params.length > 0
+                          ? config.params
+                          : [makeParam()],
+                      headers:
+                        config.headers.length > 0
+                          ? config.headers
+                          : [makeParam()],
+                    },
+                    label: deriveLabel(config),
+                    lastResponse: null,
+                    lastError: null,
+                    isTransitioning: false,
+                  }
+                : tab,
+            ),
+          }));
+        }, 400);
+      },
 
       addHistoryEntry: (entry) =>
         set((state) => ({
@@ -359,6 +370,10 @@ export const useRequestStore = create<RequestStore>()(
 
       // Proxy
       toggleProxy: () => set((state) => ({ useProxy: !state.useProxy })),
+
+      // Loading
+      setIsTransitioning: (isTransitioning) =>
+        set((state) => updateActiveTab(state, { isTransitioning })),
 
       // Derived
       getActiveTab: () => {

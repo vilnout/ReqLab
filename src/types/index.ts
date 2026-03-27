@@ -64,4 +64,5 @@ export interface RequestTab {
   lastResponse: ResponseData | null;
   lastError: string | null;
   isLoading: boolean;
+  isTransitioning: boolean;
 }
