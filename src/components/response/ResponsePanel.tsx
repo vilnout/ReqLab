@@ -129,22 +129,25 @@ export const ResponsePanel = () => {
     <div className="flex flex-1 flex-col overflow-hidden">
       {/*Header*/}
       <div className="border-border-default grid shrink-0 items-center gap-2.5 border-b px-4 py-2.5 md:flex">
-        <div className="flex items-center justify-between gap-1">
-          <span className="text-text-ghost mr-1 font-mono text-xs font-semibold tracking-widest uppercase">
+        <div className="flex min-w-0 items-center justify-between gap-1">
+          <span className="text-text-ghost mr-1 shrink-0 font-mono text-xs font-semibold tracking-widest uppercase">
             Response
           </span>
           {/*status indicator*/}
-          <div className="flex gap-1">
+          <div className="flex min-w-0 gap-1">
             <div
-              className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${statusMeta.bgPrimary} ${statusMeta.text} `}
+              className={`flex min-w-0 items-center gap-1.5 rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold ${statusMeta.bgPrimary} ${statusMeta.text}`}
             >
               <div
-                className={`h-1.5 w-1.5 rounded-full ${statusMeta.bgSecondary}`}
+                className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusMeta.bgSecondary}`}
               />
-              {status} {statusText}
+              <span className="shrink-0">{status}</span>
+              <p className="hidden truncate md:block">{statusText}</p>
             </div>
-            <div className="response-pills">{formatTiming(timingMs)}</div>
-            <div className="response-pills">{formatBytes(size)}</div>
+            <div className="response-pills shrink-0">
+              {formatTiming(timingMs)}
+            </div>
+            <div className="response-pills shrink-0">{formatBytes(size)}</div>
           </div>
         </div>
         {/*actions*/}
