@@ -1,7 +1,8 @@
 import { JsonViewer } from "@/components/response/JsonViewer";
+import { useExecuteRequest } from "@/hooks/useExecuteRequest";
 import { formatBytes, formatTiming, getStatusMeta } from "@/lib/utils";
 import { useRequestStore } from "@/stores/requestStore";
-import { AlertCircle, Check, Copy, SendIcon } from "lucide-react";
+import { AlertCircle, Check, Copy, RotateCcw, SendIcon } from "lucide-react";
 import { useState } from "react";
 
 const RESPONSE_TABS = ["pretty", "raw", "headers"] as const;
@@ -13,6 +14,13 @@ export const ResponsePanel = () => {
   const isLoading = useRequestStore((s) => s.getActiveTab().isLoading);
   const lastError = useRequestStore((s) => s.getActiveTab().lastError);
 
+  const getRequestConfig = useRequestStore((s) => s.getRequestConfig);
+  const setLastError = useRequestStore((s) => s.setLastError);
+  const setIsLoading = useRequestStore((s) => s.setIsLoading);
+  const setLastResponse = useRequestStore((s) => s.setLastResponse);
+  const addHistoryEntry = useRequestStore((s) => s.addHistoryEntry);
+  const { execute } = useExecuteRequest();
+
   const [activeTab, setActiveTab] = useState<ResponseTab>("pretty");
   const [copied, setCopied] = useState(false);
 
@@ -23,6 +31,25 @@ export const ResponsePanel = () => {
     setTimeout(() => {
       setCopied(false);
     }, 2000);
+  };
+
+  const handleRetry = () => {
+    const config = getRequestConfig();
+    setLastError(null);
+    setLastResponse(null);
+    setIsLoading(true);
+    execute(
+      config,
+      (response) => {
+        setLastResponse(response);
+        addHistoryEntry({ config, response });
+        setIsLoading(false);
+      },
+      (error) => {
+        setLastError(error);
+        setIsLoading(false);
+      },
+    );
   };
 
   // Temporary loading state
@@ -69,6 +96,13 @@ export const ResponsePanel = () => {
         <p className="text-text-ghost max-w-sm text-center font-mono text-xs leading-relaxed">
           {lastError}
         </p>
+        <button
+          onClick={handleRetry}
+          className="border-border-default text-text-muted hover:border-accent hover:text-accent mt-2 flex cursor-pointer items-center gap-2 rounded border px-4 py-2 font-mono text-xs transition-colors"
+        >
+          <RotateCcw size={11} strokeWidth={2} />
+          Try again
+        </button>
       </div>
     );
   }
