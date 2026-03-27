@@ -107,6 +107,10 @@ export interface RequestStore {
   addHistoryEntry: (entry: Omit<HistoryEntry, "id" | "sentAt">) => void;
   clearHistory: () => void;
 
+  // Proxy
+  useProxy: boolean;
+  toggleProxy: () => void;
+
   // Derived
   getActiveTab: () => RequestTab;
   getRequestConfig: () => RequestConfig;
@@ -167,6 +171,7 @@ export const useRequestStore = create<RequestStore>()(
       activeTabId: initialTab.id,
       collections: [],
       history: [],
+      useProxy: true,
 
       // Tab managment
       addTab: () => {
@@ -351,6 +356,9 @@ export const useRequestStore = create<RequestStore>()(
         })),
 
       clearHistory: () => set({ history: [] }),
+
+      // Proxy
+      toggleProxy: () => set((state) => ({ useProxy: !state.useProxy })),
 
       // Derived
       getActiveTab: () => {

@@ -1,4 +1,5 @@
 import { statusTextMap } from "@/lib/utils";
+import { useRequestStore } from "@/stores/requestStore";
 import type { RequestConfig, ResponseData } from "@/types";
 import { useCallback, useState } from "react";
 
@@ -21,7 +22,14 @@ const buildFetchConfig = (
   method: string,
   headers: Record<string, string>,
   body: string | undefined,
+  useProxy: boolean,
 ): { fetchUrl: string; fetchInit: RequestInit } => {
+  if (!useProxy) {
+    return {
+      fetchUrl: url,
+      fetchInit: { method, headers, body },
+    };
+  }
   return {
     fetchUrl: PROXY_URL,
     fetchInit: {
@@ -42,6 +50,7 @@ export const useExecuteRequest = () => {
       onError?: (error: string) => void,
     ) => {
       setState({ data: null, loading: true, error: null });
+      const useProxy = useRequestStore.getState().useProxy;
       const startTime = performance.now();
 
       try {
@@ -74,6 +83,7 @@ export const useExecuteRequest = () => {
           config.method,
           headers,
           hasBody && config.body.content ? config.body.content : undefined,
+          useProxy,
         );
 
         const response = await fetch(fetchUrl, fetchInit);
