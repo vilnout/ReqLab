@@ -45,7 +45,7 @@ export const TopBar = () => {
             <div
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`group border-border-default flex h-full max-w-45 min-w-0 shrink-0 cursor-pointer items-center gap-2 border-r px-3 transition-colors ${isActive ? "bg-surface-base border-b-accent -mb-px flex border-b-2" : "bg-surface-overlay hover:bg-surface-raised hidden md:flex"}`}
+              className={`group border-border-default flex h-full max-w-45 min-w-0 shrink-0 cursor-pointer items-center gap-2 border-r px-1 transition-colors md:px-3 ${isActive ? "bg-surface-base border-b-accent -mb-px flex border-b-2" : "bg-surface-overlay hover:bg-surface-raised hidden md:flex"}`}
             >
               <MethodBadge method={tab.config.method} size="sm" />
               <span className="text-text-muted min-w-0 flex-1 truncate font-mono text-xs">
@@ -65,7 +65,7 @@ export const TopBar = () => {
         })}
         <button
           onClick={addTab}
-          className="text-text-ghost hover:text-accent hover:bg-surface-raised flex h-full w-9 shrink-0 cursor-pointer items-center justify-center transition-colors"
+          className="text-text-ghost hover:text-accent hover:bg-surface-raised flex h-full shrink-0 cursor-pointer items-center justify-center px-1 transition-colors md:px-3"
         >
           <Plus size={14} strokeWidth={2} />
         </button>
