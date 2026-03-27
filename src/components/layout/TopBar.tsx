@@ -34,7 +34,7 @@ export const TopBar = () => {
 
   return (
     <header className="bg-surface-overlay border-border-default flex h-11 shrink-0 items-center gap-1 border-b px-1 md:gap-3 md:px-4">
-      <div className="border-border-default flex h-full shrink-0 items-center border-r px-4 md:w-51">
+      <div className="border-border-default flex h-full shrink-0 items-center border-r px-2 md:w-51 md:px-4">
         <SiteLogo />
       </div>
 
@@ -76,7 +76,7 @@ export const TopBar = () => {
           className="hidden items-center md:flex"
           title="History is in the sidebar"
         >
-          <button className="topbar-buttons">
+          <button className="topbar-buttons cursor-default opacity-40">
             <History size={15} strokeWidth={2} />
           </button>
         </div>
