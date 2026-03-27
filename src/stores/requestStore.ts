@@ -374,6 +374,7 @@ export const useRequestStore = create<RequestStore>()(
       partialize: (state) => ({
         collections: state.collections,
         history: state.history,
+        useProxy: state.useProxy,
         tabs: state.tabs.map((tab) => ({
           ...tab,
           lastResponse: null,
