@@ -4,7 +4,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { WorkspacePanel } from "@/components/layout/WorkspacePanel";
 import { useEffect, useState } from "react";
 
-const INIT_DELAY_MS = 1000;
+const INIT_DELAY_MS = 900;
 
 const App = () => {
   const [ready, setReady] = useState(false);
