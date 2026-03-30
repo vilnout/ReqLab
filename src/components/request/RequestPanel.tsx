@@ -20,8 +20,16 @@ export const RequestPanel = () => {
         {activePanel === "params" && <KeyValueEditor type="params" />}
         {activePanel === "headers" && <KeyValueEditor type="headers" />}
         {activePanel === "body" && <BodyEditor />}
-        {activePanel === "auth" && <div>auth</div>}
+        {activePanel === "auth" && <AuthPlaceholder />}
       </div>
+    </div>
+  );
+};
+
+const AuthPlaceholder = () => {
+  return (
+    <div className="text-text-ghost flex h-50 items-center justify-center font-mono text-sm">
+      Auth — out of scope
     </div>
   );
 };

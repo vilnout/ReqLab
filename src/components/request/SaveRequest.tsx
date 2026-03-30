@@ -94,7 +94,7 @@ export const SaveRequest = () => {
           <button
             onClick={handleSave}
             disabled={!requestName.trim()}
-            className="bg-accent hover:bg-accent-hover rounded py-1.5 font-mono text-xs text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            className="bg-accent hover:bg-accent-hover cursor-pointer rounded py-1.5 font-mono text-xs text-white transition-colors disabled:cursor-not-allowed disabled:opacity-40"
           >
             Save request
           </button>

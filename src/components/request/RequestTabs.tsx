@@ -60,7 +60,7 @@ export const RequestTabs = () => {
           <button
             key={tab.id}
             onClick={() => setActivePanel(tab.id)}
-            className={`-mb-px flex cursor-pointer items-center gap-1.5 border-b-2 px-3.5 py-2.5 font-sans text-[12px] transition-colors ${isActive ? "text-accent border-accent" : "text-text-ghost hover:text-text-muted hover:border-text-muted border-transparent hover:border-b-2"}`}
+            className={`-mb-px flex cursor-pointer items-center gap-1.5 border-b-2 px-3.5 py-2.5 font-sans text-xs transition-colors ${isActive ? "text-accent border-accent" : "text-text-ghost hover:text-text-muted hover:border-text-muted border-transparent hover:border-b-2"}`}
           >
             {tab.label}
             {badge !== null && (

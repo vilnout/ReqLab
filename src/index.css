@@ -43,6 +43,22 @@
   @apply bg-surface-raised border-border-default text-text-subtle rounded-full border px-2 py-0.5 font-mono text-[11px];
 }
 
+@utility scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-default);
+    border-radius: 3px;
+  }
+}
+
 @keyframes shimmer {
   0% {
     background-position: -400px 0;

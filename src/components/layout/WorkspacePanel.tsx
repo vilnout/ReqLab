@@ -8,7 +8,7 @@ export const WorkspacePanel = () => {
       <Panel
         defaultSize="45%"
         minSize="25%"
-        className="flex flex-col overflow-hidden"
+        className="scrollbar flex flex-col overflow-hidden"
       >
         <RequestPanel />
       </Panel>
