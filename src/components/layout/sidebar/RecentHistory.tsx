@@ -34,7 +34,7 @@ export const RecentHistory = ({ onNavigate }: RecentHistoryProps) => {
         )}
       </div>
 
-      <div className="overflow-y-auto pb-2">
+      <div className="scrollbar overflow-y-auto pb-2">
         {history.length === 0 && (
           <p className="px-3.5 pb-2 font-mono text-xs text-white">
             No requests yet

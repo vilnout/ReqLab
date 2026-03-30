@@ -187,7 +187,7 @@ export const ResponsePanel = () => {
         </div>
       </div>
       {/*response body*/}
-      <div className="flex-1 overflow-auto">
+      <div className="scrollbar flex-1 overflow-auto">
         {activeTab === "pretty" && <JsonViewer raw={body} />}
         {activeTab === "raw" && (
           <pre className="text-text-secondary p-4 font-mono text-xs leading-relaxed wrap-break-word whitespace-pre-wrap">
