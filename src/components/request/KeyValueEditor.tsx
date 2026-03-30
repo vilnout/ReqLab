@@ -23,7 +23,7 @@ const useEditorActions = (type: validEditorTabs) => {
 };
 
 const baseEditorInputStyle =
-  "border-border-default text-text-secondary placeholder:text-text-ghost focus:bg-surface-raised border-r bg-transparent px-3 py-2 font-mono text-[12px] transition-colors outline-none";
+  "border-border-default text-text-secondary placeholder:text-text-ghost focus:bg-surface-raised border-r bg-transparent px-3 py-2 font-mono text-xs transition-colors outline-none";
 
 interface RowProps {
   row: RequestParam;

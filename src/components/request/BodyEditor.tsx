@@ -118,7 +118,7 @@ export const BodyEditor = () => {
               strokeWidth={2}
               className="text-text-ghost mt-px shrink-0"
             />
-            <div className="text-text-ghost font-mono text-[11px] leading-relaxed">
+            <div className="text-text-ghost font-mono text-xs leading-relaxed">
               <span className="text-text-muted">{bodyType}</span> encoding is
               not yet supported.
               <br />
@@ -129,7 +129,7 @@ export const BodyEditor = () => {
         )}
 
       {!isDisabled && bodyType === "none" && (
-        <p className="text-text-ghost font-mono text-[13px]">
+        <p className="text-text-ghost font-mono text-xs">
           No body will be sent with this request.
         </p>
       )}
