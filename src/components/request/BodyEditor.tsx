@@ -60,7 +60,7 @@ export const BodyEditor = () => {
           const isActive = bodyType === value;
           return (
             <button
-              className={`rounded border px-3 py-1 font-mono text-[11px] transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${isActive ? "bg-accent-dim border-accent text-accent" : "border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle bg-transparent"}`}
+              className={`cursor-pointer rounded border px-3 py-1 font-mono text-[11px] transition-colors disabled:cursor-not-allowed disabled:opacity-30 ${isActive ? "bg-accent-dim border-accent text-accent" : "border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle bg-transparent"}`}
               key={value}
               onClick={() => handleBodyTypeChange(value)}
               disabled={isDisabled}
@@ -84,7 +84,7 @@ export const BodyEditor = () => {
             </span>
             <button
               onClick={handleFormat}
-              className="border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle flex items-center gap-1.5 rounded border px-2.5 py-1 font-mono text-[10px] transition-colors"
+              className="border-border-default text-text-ghost hover:text-text-muted hover:border-border-subtle flex cursor-pointer items-center gap-1.5 rounded border px-2.5 py-1 font-mono text-[10px] transition-colors"
             >
               <WrapText size={11} strokeWidth={2} />
               Format
